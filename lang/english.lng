@@ -1,0 +1,10 @@
+##grflangid 0x01
+# This is the English language file
+
+# GRF name and description definitions
+STR_GRF_NAME        :{TITLE} {VERSION}
+STR_GRF_DESCRIPTION :{TITLE} is a Indian Set by WoozyDragon!{}{COPYRIGHT}2020 Derp{}License: GPL v2
+
+# vehicle names
+STR_ICM_NAME        :ICM 'Koploper' - Electric
+STR_ICF_NAME        :ICF Blue
