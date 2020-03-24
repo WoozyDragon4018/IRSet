@@ -2,7 +2,7 @@ grf {
     grfid: "WD\01\01";
     name: string(STR_GRF_NAME);
     desc: string(STR_GRF_DESCRIPTION);
-    version: 0;
+    version: 5;
     min_compatible_version: 0;
 }
 
@@ -20,32 +20,32 @@ railtypetable {
 template temp_train32(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
     [x,			y, 			8,		23, 	-3,			-12]
-    [x+9,		y,			22,	 	17, 	-12, 		-10]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
     [x+32,		y, 			32,	 	12, 	-20, 		-8]
-    [x+65, 		y, 			22,	 	17, 	-12, 		-10]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
     [x+88,		y, 			8,	 	23, 	-3, 		-12]
-    [x+97,  	y, 			22,	 	17, 	-12,		-10]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
     [x+120, 	y, 			32,	 	12, 	-20,		-8]
-    [x+153, 	y, 			22,	 	17, 	-12,		-10]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
 }
 template temp_train32rev(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
     [x+88,		y, 			8,	 	23, 	-3, 		-12]
-    [x+97,  	y, 			22,	 	17, 	-12,		-10]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
     [x+120, 	y, 			32,	 	12, 	-20,		-8]
-    [x+153, 	y, 			22,	 	17, 	-14,		-11]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
 	[x,			y, 			8,		23, 	-3,			-12]
-    [x+9,		y,			22,	 	17, 	-12, 		-10]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
     [x+32,		y, 			32,	 	12, 	-20, 		-8]
-    [x+65, 		y, 			22,	 	17, 	-14, 		-11]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
 }
 template TEMP_PURCH(x,y) {
     //left_x, upper_y, width, height, offset_x, offset_y
     [x, y, 81, 12, -28, -6]
 }
 
-spriteset (spriteset_ICF, "gfx/icf_blue.png") {temp_train32(0,0)}
-spriteset (spriteset_ICF_PURCHASE, "gfx/icf_blue_purch.png") {TEMP_PURCH(0,0)}
+spriteset (spriteset_ICF, "gfx/coach/icf/icf_blue.png") {temp_train32(0,0)}
+spriteset (spriteset_ICF_PURCHASE, "gfx/coach/icf/icf_blue_purch.png") {TEMP_PURCH(0,0)}
 
 item(FEAT_TRAINS, item_icf){
     property {
@@ -84,6 +84,278 @@ item(FEAT_TRAINS, item_icf){
     }
 }
 
+//ICF-RAJDHANI
+template temp_icf_raj(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		23, 	-3,			-12]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
+    [x+32,		y, 			32,	 	12, 	-20, 		-8]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
+    [x+88,		y, 			8,	 	23, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
+    [x+120, 	y, 			32,	 	12, 	-20,		-8]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
+}
+template temp_icf_raj_rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	23, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
+    [x+120, 	y, 			32,	 	12, 	-20,		-8]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
+	[x,			y, 			8,		23, 	-3,			-12]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
+    [x+32,		y, 			32,	 	12, 	-20, 		-8]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
+}
+template TEMP_RAJ_PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_ICF_RAJ, "gfx/coach/icf/icf_raj.png") {temp_icf_raj(0,0)}
+spriteset (spriteset_ICF_RAJ_PURCHASE, "gfx/coach/icf/icf_raj_purch.png") {TEMP_RAJ_PURCH(0,0)}
+
+item(FEAT_TRAINS, item_icf_raj){
+    property {
+    name: string(STR_ICF_RAJ_NAME);
+    
+    introduction_date: date(1967,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 50; 
+    running_cost_factor: 30; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 49 ton;
+    cargo_capacity: 64;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_ICF_RAJ;
+        purchase: spriteset_ICF_RAJ_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ICF GARIBRATH
+template temp_icf_gar(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		23, 	-3,			-12]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
+    [x+32,		y, 			32,	 	12, 	-20, 		-8]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
+    [x+88,		y, 			8,	 	23, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
+    [x+120, 	y, 			32,	 	12, 	-20,		-8]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
+}
+template temp_icf_gar_rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	23, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	17, 	-13,		-11]
+    [x+120, 	y, 			32,	 	12, 	-20,		-8]
+    [x+153, 	y, 			22,	 	17, 	-13,		-11]
+	[x,			y, 			8,		23, 	-3,			-12]
+    [x+9,		y,			22,	 	17, 	-13, 		-11]
+    [x+32,		y, 			32,	 	12, 	-20, 		-8]
+    [x+65, 		y, 			22,	 	17, 	-13, 		-11]
+}
+template TEMP_GAR_PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_ICF_GAR, "gfx/coach/icf/icf_gar.png") {temp_icf_gar(0,0)}
+spriteset (spriteset_ICF_GAR_PURCHASE, "gfx/coach/icf/icf_gar_purch.png") {TEMP_GAR_PURCH(0,0)}
+
+item(FEAT_TRAINS, item_icf_gar){
+    property {
+    name: string(STR_ICF_GAR_NAME);
+    
+    introduction_date: date(2004,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 49 ton;
+    cargo_capacity: 64;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_ICF_GAR;
+        purchase: spriteset_ICF_GAR_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//LHB Rajdhani
+template temp_lhb_raj(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			26,	 	28, 	-15, 		-19]
+    [x+38,		y, 			36,	 	28, 	-21, 		-23]
+    [x+75, 		y, 			26,	 	28, 	-14, 		-20]
+    [x+102,		y, 			10,	 	28, 	-4, 		-15]
+    [x+113,  	y, 			26,	 	28, 	-15,		-19]
+    [x+140, 	y, 			32,	 	28, 	-21,		-23]
+    [x+177, 	y, 			22,	 	28, 	-14,		-20]
+}
+template temp_lhb_raj_rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+102,		y, 			10,	 	28, 	-4, 		-15]
+    [x+113,  	y, 			26,	 	28, 	-15,		-19]
+    [x+140, 	y, 			32,	 	28, 	-21,		-23]
+    [x+177, 	y, 			22,	 	28, 	-14,		-20]
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			26,	 	28, 	-15, 		-19]
+    [x+38,		y, 			36,	 	28, 	-21, 		-23]
+    [x+75, 		y, 			26,	 	28, 	-14, 		-20]
+}
+template TEMP_LHB_RAJ_PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_LHB_RAJ, "gfx/coach/lhb/lhb_raj.png") {temp_lhb_raj(0,0)}
+spriteset (spriteset_LHB_RAJ_PURCHASE, "gfx/coach/lhb/lhb_raj_purch.png") {TEMP_LHB_RAJ_PURCH(0,0)}
+
+item(FEAT_TRAINS, item_lhb_raj){
+    property {
+    name: string(STR_LHB_RAJ_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 200 km/h;
+    power: 0 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_LHB_RAJ;
+        purchase: spriteset_LHB_RAJ_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//LHB SHATABDI
+template temp_lhb_stb(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			26,	 	28, 	-15, 		-19]
+    [x+38,		y, 			36,	 	28, 	-21, 		-23]
+    [x+75, 		y, 			26,	 	28, 	-14, 		-20]
+    [x+102,		y, 			10,	 	28, 	-4, 		-15]
+    [x+113,  	y, 			26,	 	28, 	-15,		-19]
+    [x+140, 	y, 			32,	 	28, 	-21,		-23]
+    [x+177, 	y, 			22,	 	28, 	-14,		-20]
+}
+template temp_lhb_stb_rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+102,		y, 			10,	 	28, 	-4, 		-15]
+    [x+113,  	y, 			26,	 	28, 	-15,		-19]
+    [x+140, 	y, 			32,	 	28, 	-21,		-23]
+    [x+177, 	y, 			22,	 	28, 	-14,		-20]
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			26,	 	28, 	-15, 		-19]
+    [x+38,		y, 			36,	 	28, 	-21, 		-23]
+    [x+75, 		y, 			26,	 	28, 	-14, 		-20]
+}
+template TEMP_LHB_STB_PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_LHB_STB, "gfx/coach/lhb/lhb_stb.png") {temp_lhb_stb(0,0)}
+spriteset (spriteset_LHB_STB_PURCHASE, "gfx/coach/lhb/lhb_stb_purch.png") {TEMP_LHB_STB_PURCH(0,0)}
+
+item(FEAT_TRAINS, item_lhb_stb){
+    property {
+    name: string(STR_LHB_STB_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 200 km/h;
+    power: 0 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_LHB_STB;
+        purchase: spriteset_LHB_STB_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
 //ENGINES
 //WAP4
 
@@ -114,8 +386,8 @@ template TEMP_WAP4PURCH(x,y) {
     [x, y, 81, 12, -28, -6]
 }
 
-spriteset (spriteset_WAPIV, "gfx/eng_wap_iv.png") {temp_wap4(0,0)}
-spriteset (spriteset_WAPIV_PURCHASE, "gfx/eng_wap_iv_purch.png") {TEMP_WAP4PURCH(0,0)}
+spriteset (spriteset_WAPIV, "gfx/eng/ele/eng_wap_iv.png") {temp_wap4(0,0)}
+spriteset (spriteset_WAPIV_PURCHASE, "gfx/eng/ele/eng_wap_iv_purch.png") {TEMP_WAP4PURCH(0,0)}
 
 item(FEAT_TRAINS, item_eng_wapiv){
     property {
@@ -128,8 +400,76 @@ item(FEAT_TRAINS, item_eng_wapiv){
     cost_factor: 45; 
     running_cost_factor: 100; 
     speed: 140 km/h;
-    power: 3373 kW;
+    power: 4565 kW;
     weight: 113 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WAPIV;
+        purchase: spriteset_WAPIV_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//WAP7
+template temp_wap7(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+}
+template temp_wap7rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+	[x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+}
+template TEMP_WAP7PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_WAPVII, "gfx/eng/ele/eng_wap_vii.png") {temp_wap7(0,0)}
+spriteset (spriteset_WAPVII_PURCHASE, "gfx/eng/ele/eng_wap_vii_purch.png") {TEMP_WAP7PURCH(0,0)}
+
+item(FEAT_TRAINS, item_eng_wapvii){
+    property {
+    name: string(STR_ENG_WAPVII_NAME);
+    
+    introduction_date: date(1997,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 5;
+    cost_factor: 60; 
+    running_cost_factor: 100; 
+    speed: 140 km/h;
+    power: 3373 kW;
+    weight: 123 ton;
     cargo_capacity: 0;
     tractive_effort_coefficient: 0.3;
     air_drag_coefficient: 0.08;
@@ -148,7 +488,76 @@ item(FEAT_TRAINS, item_eng_wapiv){
     length: 8;
     }
     graphics {
-        default: spriteset_WAPIV;
-        purchase: spriteset_WAPIV_PURCHASE;
+        default: spriteset_WAPVII;
+        purchase: spriteset_WAPVII_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//WAP5
+template temp_wap5(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+}
+template temp_wap5rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+	[x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+}
+template TEMP_WAP5PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_WAPV, "gfx/eng/ele/eng_wap_v.png") {temp_wap5(0,0)}
+spriteset (spriteset_WAPV_PURCHASE, "gfx/eng/ele/eng_wap_v_purch.png") {TEMP_WAP5PURCH(0,0)}
+
+item(FEAT_TRAINS, item_eng_wapv){
+    property {
+    name: string(STR_ENG_WAPV_NAME);
+    
+    introduction_date: date(1992,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 5;
+    cost_factor: 60; 
+    running_cost_factor: 100; 
+    speed: 225 km/h;
+    power: 4564 kW;
+    weight: 78 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WAPV;
+        purchase: spriteset_WAPV_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
     }
 }
