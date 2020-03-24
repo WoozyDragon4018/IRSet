@@ -8,9 +8,13 @@ STR_GRF_DESCRIPTION :{TITLE} is a NewGRF Set based on the Majestic Indian Railwa
 # vehicle names
 STR_ICF_NAME        :ICF Blue
 STR_ENG_WAPIV_NAME  :WAP-4 - Electric
-STR_ENG_WAPVII_NAME :WAP-7 - Electric
 STR_ENG_WAPV_NAME   :WAP-5 - Electric
+STR_ENG_WAPVII_NAME :WAP-7 - Electric
 STR_ICF_RAJ_NAME    :ICF Rajdhani
 STR_ICF_GAR_NAME    :ICF Garibrath
 STR_LHB_RAJ_NAME    :LHB Rajdhani
 STR_LHB_STB_NAME    :LHB Shatabdi
+STR_WAPIV_ERODE     : WAP-4 - Erode Shed (RED)
+STR_WAPIV_SATG      : WAP-4 - Santragachi Shed (BLUE)
+STR_ENG_WAGIX_NAME  :WAG-9 - Electric
+STR_ICF_STB_NAME    :ICF Shatabdi
