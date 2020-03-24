@@ -3,8 +3,9 @@
 
 # GRF name and description definitions
 STR_GRF_NAME        :{TITLE} {VERSION}
-STR_GRF_DESCRIPTION :{TITLE} is a Indian Set by WoozyDragon!{}{COPYRIGHT}2020 Derp{}License: GPL v2
+STR_GRF_DESCRIPTION :{TITLE} is a NewGRF set based on the Majestic Indian Railways. {}{YELLOW}Coders: {}{SILVER}WoozyDragon4018. {}{YELLOW}Sprites: {}{SILVER}SomeIndianGuy99, rotterdxm. {}{YELLOW}Helpers: {}{SILVER}seAn | spnda, Azusa, Chris (Erato), NekoMaster
 
 # vehicle names
 STR_ICM_NAME        :ICM 'Koploper' - Electric
 STR_ICF_NAME        :ICF Blue
+STR_ENG_WAPIV_NAME  :WAP-4 - Electric

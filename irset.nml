@@ -14,131 +14,48 @@ railtypetable {
     RAIL, ELRL, MONO, MGLV,
 }
 
-/* Basic template for 4 vehicle views */
-template tmpl_vehicle_basic(x, y) {
-    // arguments x, y: coordinates of top-left corner of first sprite
-    [x,      y,  8, 24,  -3, -12] //xpos ypos xsize ysize xrel yrel
-    [x +  9, y, 22, 20, -14, -12]
-    [x + 32, y, 32, 16, -16, -12]
-    [x + 65, y, 22, 20,  -6, -12]
-}
-
-/* Template for a vehicle with only 4 views (symmetric) */
-template tmpl_vehicle_4_views(num) {
-    // argument num: Index in the graphics file, assuming vertical ordering of vehicles
-    tmpl_vehicle_basic(1, 1 + 32 * num)
-}
-
-/* Template for a vehicle with 8 views (non-symmetric) */
-template tmpl_vehicle_8_views(num, reversed) {
-    // argument num: Index in the graphics file, assuming vertical ordering of vehicles
-    // argument reversed: Reverse visible orientation of vehicle, if set to 1
-    tmpl_vehicle_basic(reversed ? 89 : 1, 1 + 32 * num)
-    tmpl_vehicle_basic(reversed ? 1 : 89, 1 + 32 * num)
-}
-
-/* Template for a single vehicle sprite */
-template tmpl_vehicle_single(num, xsize, ysize, xoff, yoff) {
-    [1, 1 + 32 * num, xsize, ysize, xoff, yoff]
-}
-
-/* Define the spritesets, these allow referring to these sprites later on */
-spriteset (set_icm_front_lighted, "gfx/icm.png") { tmpl_vehicle_8_views(0, 0) }
-spriteset (set_icm_rear_lighted,  "gfx/icm.png") { tmpl_vehicle_8_views(1, 1) }
-spriteset (set_icm_front,         "gfx/icm.png") { tmpl_vehicle_8_views(2, 0) }
-spriteset (set_icm_rear,          "gfx/icm.png") { tmpl_vehicle_8_views(3, 1) }
-spriteset (set_icm_middle,        "gfx/icm.png") { tmpl_vehicle_4_views(4)    }
-spriteset (set_icm_purchase,      "gfx/icm.png") { tmpl_vehicle_single(5, 53, 14, -25, -10) }
-spriteset (set_icm_invisible,     "gfx/icm.png") { tmpl_vehicle_single(6,  1,  1,   0,   0) }
-
-/* Define the actual train */
-item(FEAT_TRAINS, item_icm) {
-    /* Define properties first, make sure to set all of them */
-    property {
-        name:                         string(STR_ICM_NAME);
-        // not available in toyland:
-        climates_available:           bitmask(CLIMATE_TEMPERATE, CLIMATE_ARCTIC, CLIMATE_TROPICAL); 
-        introduction_date:            date(1983, 1, 1);
-        model_life:                   VEHICLE_NEVER_EXPIRES;
-        vehicle_life:                 30;
-        reliability_decay:            20;
-        refittable_cargo_classes:     bitmask(CC_PASSENGERS);
-        non_refittable_cargo_classes: bitmask();
-        // refitting is done via cargo classes only, no cargo types need explicit enabling/disabling
-        // It's an intercity train, loading is relatively slow:
-        loading_speed:                6; 
-        cost_factor:                  45;
-        running_cost_factor:          100; // Changed by callback
-        sprite_id:                    SPRITE_ID_NEW_TRAIN;
-        speed:                        141 km/h; // actually 140, but there are rounding errors
-        misc_flags:                   bitmask(TRAIN_FLAG_2CC, TRAIN_FLAG_MU);
-        refit_cost:                   0; //refit costs don't apply to subcargo display 
-        // callback flags are not set manually
-        track_type:                   ELRL; // from rail type table
-        ai_special_flag:              AI_FLAG_PASSENGER;
-        power:                        1260 kW; // Changed by CB
-        running_cost_base:            RUNNING_COST_ELECTRIC;
-        dual_headed:                  0;
-        cargo_capacity:               36; // per part, changed by callback
-        weight:                       144 ton; // Total, changed by callback
-        ai_engine_rank:               0; // not intended to be used by the ai
-        engine_class:                 ENGINE_CLASS_ELECTRIC;
-        extra_power_per_wagon:        0 kW;
-        // 4/12 of weight on driving wheels, with a default friction coefficient of 0.3:
-        tractive_effort_coefficient:  0.3 / 3; // changed by callback
-        air_drag_coefficient:         0.06;
-        // Overridden by callback to disable for non-powered wagons:
-        visual_effect_and_powered:    visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 2, DISABLE_WAGON_POWER);
-        extra_weight_per_wagon:       0 ton;
-        bitmask_vehicle_info:         0;
-    }
-    /* Define graphics and callbacks
-     * Setting all callbacks is not needed, only define what is used */
-    graphics {
-        default:                      set_icm_front_lighted;
-    }
-}
-/*ICF BLUE*/
+//COACHES
+//ICFBLUE
 
 template temp_train32(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
     [x,			y, 			8,		23, 	-3,			-12]
-    [x+9,		y,			22,	 	17, 	-14, 		-12]
+    [x+9,		y,			22,	 	17, 	-12, 		-10]
     [x+32,		y, 			32,	 	12, 	-20, 		-8]
-    [x+65, 		y, 			22,	 	17, 	-6, 		-12]
+    [x+65, 		y, 			22,	 	17, 	-12, 		-10]
     [x+88,		y, 			8,	 	23, 	-3, 		-12]
-    [x+97,  	y, 			22,	 	17, 	-14,		-12]
+    [x+97,  	y, 			22,	 	17, 	-12,		-10]
     [x+120, 	y, 			32,	 	12, 	-20,		-8]
-    [x+153, 	y, 			22,	 	17, 	-6,			-12]
+    [x+153, 	y, 			22,	 	17, 	-12,		-10]
 }
 template temp_train32rev(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
     [x+88,		y, 			8,	 	23, 	-3, 		-12]
-    [x+97,  	y, 			22,	 	17, 	-14,		-12]
+    [x+97,  	y, 			22,	 	17, 	-12,		-10]
     [x+120, 	y, 			32,	 	12, 	-20,		-8]
-    [x+153, 	y, 			22,	 	17, 	-6,			-12]
+    [x+153, 	y, 			22,	 	17, 	-14,		-11]
 	[x,			y, 			8,		23, 	-3,			-12]
-    [x+9,		y,			22,	 	17, 	-14, 		-12]
+    [x+9,		y,			22,	 	17, 	-12, 		-10]
     [x+32,		y, 			32,	 	12, 	-20, 		-8]
-    [x+65, 		y, 			22,	 	17, 	-6, 		-12]
+    [x+65, 		y, 			22,	 	17, 	-14, 		-11]
 }
 template TEMP_PURCH(x,y) {
     //left_x, upper_y, width, height, offset_x, offset_y
     [x, y, 81, 12, -28, -6]
 }
 
-spriteset (spriteset_ICF, "gfx/blue.png") {temp_train32(0,0)}
-spriteset (spriteset_ICF_PURCHASE, "gfx/blue_purch.png") {TEMP_PURCH(0,0)}
+spriteset (spriteset_ICF, "gfx/icf_blue.png") {temp_train32(0,0)}
+spriteset (spriteset_ICF_PURCHASE, "gfx/icf_blue_purch.png") {TEMP_PURCH(0,0)}
 
 item(FEAT_TRAINS, item_icf){
     property {
     name: string(STR_ICF_NAME);
     
-    introduction_date: date(2000,1,1);
+    introduction_date: date(1998,1,1);
     model_life: VEHICLE_NEVER_EXPIRES;
     vehicle_life: 40;
     loading_speed: 5;
-    cost_factor: 30; 
+    cost_factor: 20; 
     running_cost_factor: 30; 
     speed: 110 km/h;
     power: 0 kW;
@@ -150,7 +67,7 @@ item(FEAT_TRAINS, item_icf){
     reliability_decay: 20;
     misc_flags: 0;
     refit_cost: 0;
-    track_type: ELRL;
+    track_type: RAIL;
     ai_special_flag: 0;
     running_cost_base: RUNNING_COST_ELECTRIC;
     engine_class: ENGINE_CLASS_ELECTRIC;
@@ -163,6 +80,75 @@ item(FEAT_TRAINS, item_icf){
     graphics {
         default: spriteset_ICF;
         purchase: spriteset_ICF_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ENGINES
+//WAP4
+
+template temp_wap4(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+}
+template temp_wap4rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-12]
+	[x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+}
+template TEMP_WAP4PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+
+spriteset (spriteset_WAPIV, "gfx/eng_wap_iv.png") {temp_wap4(0,0)}
+spriteset (spriteset_WAPIV_PURCHASE, "gfx/eng_wap_iv_purch.png") {TEMP_WAP4PURCH(0,0)}
+
+item(FEAT_TRAINS, item_eng_wapiv){
+    property {
+    name: string(STR_ENG_WAPIV_NAME);
     
+    introduction_date: date(1991,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 5;
+    cost_factor: 45; 
+    running_cost_factor: 100; 
+    speed: 140 km/h;
+    power: 3373 kW;
+    weight: 113 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WAPIV;
+        purchase: spriteset_WAPIV_PURCHASE;
     }
 }
