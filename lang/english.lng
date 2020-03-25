@@ -18,3 +18,8 @@ STR_WAPIV_ERODE     : WAP-4 - Erode Shed (RED)
 STR_WAPIV_SATG      : WAP-4 - Santragachi Shed (BLUE)
 STR_ENG_WAGIX_NAME  :WAG-9 - Electric
 STR_ICF_STB_NAME    :ICF Shatabdi
+STR_ENG_WAPI_NAME   :WAP-1 - Electric
+STR_WAPI_ARKN       : WAP-1 - Arakkonam Shed [BLUE]
+STR_WAPI_GZB        : WAP-1 - Ghaziabad Shed [RED]
+STR_ENG_WCMI_NAME   :WCM-1 - Electric
+STR_ICF_DC_NAME     :ICF Deccan Queen
