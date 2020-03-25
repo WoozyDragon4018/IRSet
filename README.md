@@ -11,7 +11,7 @@ This will help you to get started with the IRSet.
 * And you're done! Run the Game, and enable the NewGRF and you can enjoy the Indian Trains yourself!
 
 ### Compiling
-* First you need a lot of things, NMLC.exe, PIL, PLY etc. Follow this [https://www.tt-wiki.net/wiki/NMLTutorial/Installation#Installing_NML_3]website to know about installation of NML
+* First you need a lot of things, NMLC.exe, PIL, PLY etc. Follow this [https://www.tt-wiki.net/wiki/NMLTutorial/Installation#Installing_NML_3](website) to know about installation of NML
 * You have to open your Command Prompt, type `nmlc --grf irset.grf irset.nml` to compile the file if you edited it after all installation is done.
 * Voila! Your file will be compiled into a GRF file!
 
