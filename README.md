@@ -23,7 +23,7 @@ These are the members who made this project possible!
 
 ## Some Specifications
 ### Version
-v0.0.6 - Pre Alpha
+v0.0.7 - Pre Alpha
 
 ### Trains Included (as per current version)
 #### Locomotives (4)
