@@ -26,19 +26,22 @@ These are the members who made this project possible!
 v0.0.7 - Pre Alpha
 
 ### Trains Included (as per current version)
-#### Locomotives (4)
+#### Locomotives (6)
+* WCM-1
+* WAP-1
 * WAP-4
 * WAP-5
 * WAP-7
 * WAG-9
 
-#### Coaches (6)
+#### Coaches (7)
 * ICF Blue
 * ICF Rajdhani
 * ICF Garibrath
 * ICF Shatabdi
 * LHB Shatabdi
 * LHB Rajdhani
+* ICF Deccan Queen
 
 ReadMe File by WoozyDragon4018.
 
