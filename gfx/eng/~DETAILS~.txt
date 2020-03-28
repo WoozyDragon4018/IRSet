@@ -1,6 +1,6 @@
 DIR    |DETAILS			      |CONTENTS
        |			      |
-ele    |Electric Locomotives	      |WAP-1, WCM-1, WAP-4, WAP-5, WAP-7, WAG-9
+ele    |Electric Locomotives	      |WCM-1, WAP-1, WAP-4, WAP-5, WAP-7, WAG-9
 dsl    |Diesel Locomotives	      |Work in Progress...
 
 IRSet, 2020

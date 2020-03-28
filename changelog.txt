@@ -1,0 +1,16 @@
+THE INDIAN RAILWAYS SET - IRSET
+DEVELOPED BY WOOZYDRAGON
+--------------------------------------------------
+Latest Changelog (0.0.8 - PreAlpha):
+ - Added WAP-4 Horn Sound Effect
+ - Added Suburban Rake EMU and Siemens Rake EMU
+ - Changed the Purchase Menu Text fron IR Addon to IRSet.
+ - Added a new livery for WAG-9 (Ashok - RED)
+Fixes:
+ - Fixed Panto Reversal Issue of Electric Engines
+ - Fixed Driver Carriage issue in the Suburban Rake EMU and Siemens Rake EMU
+ - Fixed EMUs being defined as Diesel Locos.
+--------------------------------------------------
+CODERS: WOOZYDRAGON4018
+SPRITERS: ROTTERDXM, SOMEINDIANGUY99, PURNO, WOOZYDRAGON4018.
+HELPERS: AZUSA, SEAN | SPNDA, CHRIS (ERATO).

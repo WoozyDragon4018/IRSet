@@ -14,7 +14,7 @@ railtypetable {
     RAIL, ELRL, MONO, MGLV,
 }
 cargotable{
-    PASS, MAIL, GOOD, COAL
+    PASS, MAIL, GOOD, COAL,
 }
 
 //COACHES
@@ -358,6 +358,252 @@ item(FEAT_TRAINS, item_icf_stb){
     }
 }
 
+//Suburban Rake - Mumbai
+//TEMPLATES
+//Passenger Coach
+template temp_sr_coach(x,y) {
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			27,	 	28, 	-15, 		-17]
+    [x+39,		y, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y, 			27,	 	28, 	-14,		-18]
+}
+//Driver's Coach
+template temp_sr_driver(x,y) {
+    [x,			y+29, 			10,		28, 	-4,			-15]
+    [x+11,		y+29,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+29, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+29, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+29, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+29, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+29, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+29, 			27,	 	28, 	-14,		-18]
+}
+//Driver's Coach Reverse
+template temp_sr_driver_rev(x,y) {
+    [x,			y+104, 			10,		28, 	-4,			-15]
+    [x+11,		y+104,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+104, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+104, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+104, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+104, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+104, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+104, 			27,	 	28, 	-14,		-18]
+}
+//Power Car
+template temp_sr_power(x,y) {
+    [x,			y+58, 			10,		28, 	-4,			-15]
+    [x+11,		y+58,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+58, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+58, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+58, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+58, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+58, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+58, 			27,	 	28, 	-14,		-18]
+}
+template temp_sr_purchase(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y+90, 81, 13, -28, -6]
+}
+//SPRITESETS
+spriteset (spriteset_sr_coach, "gfx/emu/icf_suburbanrake.png") {temp_sr_coach(0,0)}
+spriteset (spriteset_sr_driver, "gfx/emu/icf_suburbanrake.png") {temp_sr_driver(0,0)}
+spriteset (spriteset_sr_power, "gfx/emu/icf_suburbanrake.png") {temp_sr_power(0,0)}
+spriteset (spriteset_sr_driver_rev, "gfx/emu/icf_suburbanrake.png") {temp_sr_driver_rev(0,0)}
+spriteset (spriteset_sr_purch, "gfx/emu/icf_suburbanrake.png") {temp_sr_purchase(0,0)}
+
+switch(FEAT_TRAINS, SELF, sw_sr_articulated_part, extra_callback_info1) {
+    /* Add four articulated parts, for a total of five. */
+    1 .. 4: return item_icf_sr;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_graphics, position_in_consist % 5) {
+    0:      spriteset_sr_driver;
+    1:      spriteset_sr_coach;
+    2:      spriteset_sr_power;
+    3:      spriteset_sr_coach;
+    4:      spriteset_sr_driver_rev;
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_start_stop, num_vehs_in_consist) {
+    /* Vehicles may be coupled to a maximum of 3 units (15 cars) */
+    1 .. 15: return CB_RESULT_NO_TEXT;
+    return string(STR_SR_CANNOT_START);
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_can_attach_wagon, vehicle_type_id) {
+    /* SELF refers to the wagon here, check that it's an ICM */
+    item_icf_sr: return CB_RESULT_ATTACH_ALLOW;
+    return string(STR_SR_CANNOT_ATTACH_OTHER);
+}
+
+item(FEAT_TRAINS, item_icf_sr){
+    property {
+    name: string(STR_ICF_SR_NAME);
+    
+    introduction_date: date(1958,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 100 km/h;
+    power: 210 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 2, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: sw_sr_graphics;
+        purchase: spriteset_sr_purch;
+        can_attach_wagon: sw_sr_can_attach_wagon;
+        start_stop: sw_sr_start_stop;
+        articulated_part: sw_sr_articulated_part;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//Siemens Rake - Mumbai
+//TEMPLATES
+//Passenger Coach
+template temp_srm_coach(x,y) {
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			27,	 	28, 	-15, 		-17]
+    [x+39,		y, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y, 			27,	 	28, 	-14,		-18]
+}
+//Driver's Coach
+template temp_srm_driver(x,y) {
+    [x,			y+29, 			10,		28, 	-4,			-15]
+    [x+11,		y+29,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+29, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+29, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+29, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+29, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+29, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+29, 			27,	 	28, 	-14,		-18]
+}
+//Driver's Coach Reverse
+template temp_srm_driver_rev(x,y) {
+    [x,			y+104, 			10,		28, 	-4,			-15]
+    [x+11,		y+104,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+104, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+104, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+104, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+104, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+104, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+104, 			27,	 	28, 	-14,		-18]
+}
+//Power Car
+template temp_srm_power(x,y) {
+    [x,			y+58, 			10,		28, 	-4,			-15]
+    [x+11,		y+58,			27,	 	28, 	-15, 		-17]
+    [x+39,		y+58, 			36,	 	28, 	-21, 		-18]
+    [x+76, 		y+58, 			27,	 	28, 	-14, 		-18]
+    [x+104,		y+58, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y+58, 			27,	 	28, 	-15,		-17]
+    [x+143, 	y+58, 			36,	 	28, 	-21,		-18]
+    [x+180, 	y+58, 			27,	 	28, 	-14,		-18]
+}
+template temp_srm_purchase(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y+90, 81, 13, -28, -6]
+}
+//SPRITESETS
+spriteset (spriteset_srm_coach, "gfx/emu/icf_siemensrake.png") {temp_srm_coach(0,0)}
+spriteset (spriteset_srm_driver, "gfx/emu/icf_siemensrake.png") {temp_srm_driver(0,0)}
+spriteset (spriteset_srm_power, "gfx/emu/icf_siemensrake.png") {temp_srm_power(0,0)}
+spriteset (spriteset_srm_driver_rev, "gfx/emu/icf_siemensrake.png") {temp_srm_driver_rev(0,0)}
+spriteset (spriteset_srm_purch, "gfx/emu/icf_siemensrake.png") {temp_srm_purchase(0,0)}
+
+switch(FEAT_TRAINS, SELF, sw_srm_articulated_part, extra_callback_info1) {
+    /* Add four articulated parts, for a total of five. */
+    1 .. 4: return item_icf_srm;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+switch(FEAT_TRAINS, SELF, sw_srm_graphics, position_in_consist % 5) {
+    0:      spriteset_srm_driver;
+    1:      spriteset_srm_coach;
+    2:      spriteset_srm_power;
+    3:      spriteset_srm_coach;
+    4:      spriteset_srm_driver_rev;
+}
+
+switch(FEAT_TRAINS, SELF, sw_srm_start_stop, num_vehs_in_consist) {
+    /* Vehicles may be coupled to a maximum of 3 units (15 cars) */
+    1 .. 15: return CB_RESULT_NO_TEXT;
+    return string(STR_SR_CANNOT_START);
+}
+
+switch(FEAT_TRAINS, SELF, sw_srm_can_attach_wagon, vehicle_type_id) {
+    /* SELF refers to the wagon here, check that it's an ICM */
+    item_icf_srm: return CB_RESULT_ATTACH_ALLOW;
+    return string(STR_SRM_CANNOT_ATTACH_OTHER);
+}
+
+item(FEAT_TRAINS, item_icf_srm){
+    property {
+    name: string(STR_ICF_SRM_NAME);
+    
+    introduction_date: date(2005,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 5;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 100 km/h;
+    power: 240 kW;
+    weight: 51 ton;
+    cargo_capacity: 84;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 2, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: sw_srm_graphics;
+        purchase: spriteset_srm_purch;
+        can_attach_wagon: sw_srm_can_attach_wagon;
+        start_stop: sw_srm_start_stop;
+        articulated_part: sw_srm_articulated_part;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
 
 //LHB Rajdhani
 template temp_lhb_raj(x,y) {
@@ -496,6 +742,73 @@ item(FEAT_TRAINS, item_lhb_stb){
 }
 
 //ENGINES
+//WDM2
+template temp_wdm2(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-16]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-16]
+}
+template temp_wdm2rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y, 			22,	 	20, 	-14,		-16]
+	[x,			y, 			8,		24, 	-3,			-12]
+    [x+9,		y,			22,	 	20, 	-14, 		-12]
+    [x+32,		y, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y, 			22,	 	20, 	-14, 		-16]
+}
+template TEMP_WDM2PURCH(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+spriteset (spriteset_WDMII, "gfx/eng/dsl/eng_dsl_wdm2.png") {temp_wdm2(0,0)}
+spriteset (spriteset_WDMII_PURCHASE, "gfx/eng/dsl/eng_dsl_wdm2_purch.png") {TEMP_WDM2PURCH(0,0)}
+
+item(FEAT_TRAINS, item_eng_wdmii){
+    property {
+    name: string(STR_ENG_WDMII_NAME);
+    
+    introduction_date: date(1951,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 5;
+    cost_factor: 60; 
+    running_cost_factor: 100; 
+    speed: 120 km/h;
+    power: 1900 kW;
+    weight: 112 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WDMII;
+        purchase: spriteset_WDMII_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
 //WCM1
 template temp_wcm1(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
@@ -638,7 +951,7 @@ item(FEAT_TRAINS, item_eng_wapi){
     name: string(STR_ENG_WAPI_NAME);
     
     introduction_date: date(1977,1,1);
-    model_life: 16;
+    model_life: VEHICLE_NEVER_EXPIRES;
     vehicle_life: 10;
     loading_speed: 5;
     cost_factor: 45; 
@@ -744,6 +1057,12 @@ switch(FEAT_TRAINS,SELF,switch_livery_WAPIV_text,cargo_subtype){
        return CB_RESULT_NO_TEXT;
 }
 
+//Sounds 
+switch(FEAT_TRAINS, SELF, sw_sfx_wap_iv, getbits(extra_callback_info1, 0, 8)){
+    SOUND_EVENT_START : sound("sfx/wapiv_a.wav") ;
+    SOUND_EVENT_BREAKDOWN : SOUND_TRAIN_BREAKDOWN ;
+}
+
 item(FEAT_TRAINS, item_eng_wapiv){
     property {
     name: string(STR_ENG_WAPIV_NAME);
@@ -782,6 +1101,7 @@ item(FEAT_TRAINS, item_eng_wapiv){
         colour_mapping: return PALETTE_CC_FIRST;
         cargo_subtype_text:	switch_livery_WAPIV_text;
         cargo_capacity: 0;
+        sound_effect: sw_sfx_wap_iv;
     }
 }
 
@@ -922,6 +1242,7 @@ item(FEAT_TRAINS, item_eng_wapvii){
 }
 
 //WAG9
+//Standard Green Livery
 template temp_wag9(x,y) {
     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
     [x,			y, 			8,		24, 	-3,			-12]
@@ -944,13 +1265,49 @@ template temp_wag9rev(x,y) {
     [x+32,		y, 			32,	 	16, 	-20, 		-12]
     [x+65, 		y, 			22,	 	20, 	-14, 		-12]
 }
+//WAG-9H Red Livery
+template temp_wag9_r(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y+28, 			8,		24, 	-3,			-12]
+    [x+9,		y+28,			22,	 	20, 	-14, 		-12]
+    [x+32,		y+28, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y+28, 			22,	 	20, 	-14, 		-12]
+    [x+88,		y+28, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y+28, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y+28, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y+28, 			22,	 	20, 	-14,		-12]
+}
+template temp_wag9_r_rev(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x+88,		y+28, 			8,	 	24, 	-3, 		-12]
+    [x+97,  	y+28, 			22,	 	20, 	-14,		-12]
+    [x+120, 	y+28, 			32,	 	16, 	-20,		-12]
+    [x+153, 	y+28, 			22,	 	20, 	-14,		-12]
+    [x,			y+28, 			8,		24, 	-3,			-12]
+    [x+9,		y+28,			22,	 	20, 	-14, 		-12]
+    [x+32,		y+28, 			32,	 	16, 	-20, 		-12]
+    [x+65, 		y+28, 			22,	 	20, 	-14, 		-12]
+}
 template TEMP_WAG9PURCH(x,y) {
     //left_x, upper_y, width, height, offset_x, offset_y
     [x, y, 81, 12, -28, -6]
 }
 
 spriteset (spriteset_WAGIX, "gfx/eng/ele/eng_wag_ix.png") {temp_wag9(0,0)}
+spriteset (spriteset_WAGIX_R, "gfx/eng/ele/eng_wag_ix.png") {temp_wag9_r(0,0)}
 spriteset (spriteset_WAGIX_PURCHASE, "gfx/eng/ele/eng_wag_ix_purch.png") {TEMP_WAG9PURCH(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAGIX,cargo_subtype){
+    0:	spriteset_WAGIX; //Standard Green Livery
+    1:	spriteset_WAGIX_R; //Red Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WAGIX_text,cargo_subtype){
+    0: return string(STR_WAGIX_G);
+    1: return string(STR_WAGIX_R);
+       return CB_RESULT_NO_TEXT;
+}
 
 item(FEAT_TRAINS, item_eng_wagix){
     property {
@@ -981,10 +1338,14 @@ item(FEAT_TRAINS, item_eng_wagix){
     sprite_id: SPRITE_ID_NEW_TRAIN;
     dual_headed: 0;
     length: 8;
+    cargo_allow_refit: [GOOD];
+    cargo_capacity: 1;
     }
     graphics {
-        default: spriteset_WAGIX;
+        default: switch_livery_WAGIX;
         purchase: spriteset_WAGIX_PURCHASE;
         colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAGIX_text;
+        cargo_capacity: 0;
     }
 }

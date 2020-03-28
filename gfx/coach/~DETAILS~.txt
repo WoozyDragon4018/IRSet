@@ -1,5 +1,5 @@
-DIR    |DETAILS			   |CONTENTS
-       |			          |
+DIR    |DETAILS			      |CONTENTS
+       |			      |
 icf    |Integral Coach Factory Coaches|ICF Rajdhani, ICF Blue, ICF Garibrath, ICF Shatabdi, ICF Deccan Queen
 lhb    |Link Hofmann Busch coaches    |LHB Rajdhani, LHB Shatabdi
 
