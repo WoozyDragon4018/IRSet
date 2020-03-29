@@ -26,7 +26,7 @@ These are the members who made this project possible!
 
 ## Some Specifications
 ### Version
-v0.0.7 - Pre Alpha
+v0.0.8 - Pre Alpha
 
 ### Trains Included (as per current version)
 #### Locomotives (6)
@@ -45,6 +45,10 @@ v0.0.7 - Pre Alpha
 * LHB Shatabdi
 * LHB Rajdhani
 * ICF Deccan Queen
+
+#### EMUs (2)
+* Suburban Rake EMU of Mumbai
+* Siemens Rake EMU of Mumbai
 
 ReadMe File by WoozyDragon4018.
 
