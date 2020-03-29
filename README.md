@@ -1,5 +1,8 @@
 # IRSet
 An NewGRF Set based on the Majestic Indian Railways!
+
+It has also been released on BaNaNas, so you can find it in the Online Store of OpenTTD!
+
 ## Getting Started
 This will help you to get started with the IRSet.
 ### Installation
