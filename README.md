@@ -6,6 +6,12 @@ It has also been released on BaNaNas, so you can find it in the Online Store of 
 ## Getting Started
 This will help you to get started with the IRSet.
 ### Installation
+#### Windows
+* Download the [irset.grf](irset.grf) file and [install.bat](install.bat) file to one single directory.
+* Run the [install.bat](install.bat) file and follow the steps
+* And you're done! Instructions for enabling the GRF will be provided in the installer itself.
+
+#### Other Operating Systems (Macintosh, Linux, etc.)
 * First download/clone this Git and download it to your computer.
 * Then, if you have OpenTTD, navigate to your "C:\Users\[user]\Documents\OpenTTD\newgrf" Folder
 * Open another Explorer Window or open a File Manager Window, and navigate to the path where you have installed the ZIP file.
