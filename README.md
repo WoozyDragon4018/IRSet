@@ -6,6 +6,7 @@ It has also been released on BaNaNas, so you can find it in the Online Store of 
 ## Getting Started
 This will help you to get started with the IRSet.
 ### Installation
+(you can get it directly from openttd's online store)
 #### Windows
 * Download the [irset.grf](irset.grf) file and [install.bat](install.bat) file to one single directory.
 * Run the [install.bat](install.bat) file and follow the steps
