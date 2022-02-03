@@ -31,3 +31,9 @@ STR_SR_CANNOT_ATTACH_OTHER  :...Only Suburban Rake Parts can be attached to othe
 STR_SR_CANNOT_START         :...Train Cannot Start! Wagon Limit is limited to 3 Units (15 Coaches).
 STR_SRM_CANNOT_ATTACH_OTHER :...Only Siemens Rake Parts can be attached to other Siemens Rake Parts!
 STR_ICF_SRM_NAME            :Siemens Rake EMU - Electric
+STR_VBE_NAME                :Vande Bharat Express (Train 18) - Main Part - Electric
+STR_VBE_CANNOT_ATTACH_OTHER :...Only Vande Bharat Express parts can be attached to other Vande Bharat Express Parts!
+STR_VBE_NAME_CH             :Vande Bharat Express (Train 18) - Coach
+STR_ENG_WAGXII_NAME         :WAG-12 - Electric
+STR_ICF_BROWN_NAME          :ICF Brown
+STR_LHB_HYB_NAME            :Hybrid LHB
