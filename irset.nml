@@ -1,0 +1,3134 @@
+grf {
+    grfid: "WD\01\01";
+    name: string(STR_GRF_NAME);
+    desc: string(STR_GRF_DESCRIPTION);
+    version: 30;
+    min_compatible_version: 0;
+}
+
+railtypetable {
+    RAIL, ELRL, MONO, MGLV,
+}
+cargotable {
+    PASS, MAIL, GOOD, COAL, IORE, LIME, VEHI, CMNT, GRAI, WHEA, FRUT, MAIZ, SUGR, COPR, BEAN, CERE, CLAY, FERT, FICR, PEAT, PHOS, SAND, WDPR, KAOL, AORE, CORE, NICK, NKOR, SULP, URAN, SCMT, RUBR, CTAR, DYES, MILK, OIL_, FUEL, EOIL, FOOD, FISH, CHSE, FRVG, MEAT, OYST, TATO, PCL_
+}
+basecost {
+    PR_BUILD_VEHICLE_TRAIN: -1; //Set the BaseCost for TRAIN BUILDING to 0 (Means DEFAULT 400000)
+    PR_BUILD_VEHICLE_WAGON: 3; //Set the basecost for Wagon Building to 2x
+}
+
+// TEMPLATES
+// 32bpp sprite
+template temp_train(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			10,		32, 	-4,			-12]
+    [x+18,		y,			28,	 	30, 	-21, 		-18]
+    [x+54,		y, 			35,	 	30, 	-15, 		-23]
+    [x+97, 		y, 			28,	 	30, 	-8, 		-19]
+    [x+133,		y, 			10,	 	32, 	-4, 		-12]
+    [x+151,  	y, 			28,	 	30, 	-21,		-18]
+    [x+187, 	y, 			35,	 	30, 	-15,		-23]
+    [x+230, 	y, 			28,	 	30, 	-8,		    -19]
+}
+traininfo_y_offset = 2;
+train_width_32_px = 4;
+// Double stack container template (with higher y offset value.)
+template temp_ds(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			10,		32, 	-4,			-19]
+    [x+18,		y,			28,	 	30, 	-21, 		-24]
+    [x+54,		y, 			35,	 	30, 	-15, 		-32]
+    [x+97, 		y, 			28,	 	30, 	-8, 		-25]
+    [x+133,		y, 			10,	 	32, 	-4, 		-19]
+    [x+151,  	y, 			28,	 	30, 	-21,		-24]
+    [x+187, 	y, 			35,	 	30, 	-15,		-32]
+    [x+230, 	y, 			28,	 	30, 	-8,		    -25]
+}
+// 8bpp sprite (dummy)
+template dummy_sprite(x,y) {
+    //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+    [x,			y, 			10,		28, 	-4,			-15]
+    [x+11,		y,			27,	 	28, 	-16, 		-16]
+    [x+39,		y, 			36,	 	28, 	-23, 		-17]
+    [x+76, 		y, 			27,	 	28, 	-13, 		-15]
+    [x+104,		y, 			10,	 	28, 	-4, 		-15]
+    [x+115,  	y, 			27,	 	28, 	-16,		-16]
+    [x+143, 	y, 			32,	 	28, 	-23,		-17]
+    [x+143, 	y, 			27,	 	28, 	-13,		-15]
+}
+// 8bpp purchase sprite (dummy)
+template temp_dummypurch(x,y) {
+    //left_x, upper_y, width, height, offset_x, offset_y
+    [x, y, 81, 12, -28, -6]
+}
+// 32bpp purchase sprite
+template temp_purch(x, y) {
+    [x, y, 81, 17, -28, -9]
+}
+// Dual header purchase sprite
+template temp_dh_purch(x, y) {
+    //[left_x, upper_y, width, height, offset_x, offset_y]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+    [x  ,  y,  81, 12, -28, -9]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty.png"]
+}
+template temp_dh32_purch(x, y) {
+    //[left_x, upper_y, width, height, offset_x, offset_y]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+    [x  ,  y,  81, 17, -14, -9]
+    [1  ,  1,  1,  1,   0,   0, "gfx/empty32.png"]
+}
+//Thanks to Emperor Jake for this!
+
+disable_item(FEAT_TRAINS, 00, 115); // disable trains - Thanks to andythenorth!
+
+//COACHES
+//DECCAN QUEEN
+spriteset (spriteset_ICF_DC, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_DC, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_dc.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_DC_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_DC_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_dc_purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_icf_dc){
+    property {
+    name: string(STR_ICF_DC_NAME);
+    
+    introduction_date: date(1952,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 40; 
+    running_cost_factor: 30; 
+    speed: 105 km/h;
+    power: 0 kW;
+    weight: 62 ton;
+    cargo_capacity: 65;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_ICF_DC;
+        purchase: spriteset_ICF_DC_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// Vande Bharat Express (VBE) - Train 18
+// FRONT/BACK
+spriteset (spriteset_VBE, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VBE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/icf_vbe_fb.png") {temp_train(0,0)}
+spriteset (spriteset_VBE_PURCHASE, "gfx/emu/dummy-sprite-p.png") {temp_dh_purch(0,0)}
+alternative_sprites (spriteset_VBE_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/icf_vbe_purch.png") {temp_dh32_purch(0,0)}
+// COACH
+spriteset (spriteset_VBE_CH, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VBE_CH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/icf_vbe_c.png") {temp_train(0,0)}
+spriteset (spriteset_VBE_CH_PURCHASE, "gfx/emu/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_VBE_CH_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/icf_vbe_car_purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS, SELF, sw_vbe_can_attach_wagon, vehicle_type_id) {
+    /* SELF refers to the wagon here, check that it's a VBE Part */
+    item_vbe: return CB_RESULT_ATTACH_ALLOW;
+    item_vbe_ch: return CB_RESULT_ATTACH_ALLOW;
+    return string(STR_VBE_CANNOT_ATTACH_OTHER);
+}
+
+item(FEAT_TRAINS, item_vbe){
+    property {
+    name: string(STR_VBE_NAME);
+    
+    introduction_date: date(2018,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 75; 
+    running_cost_factor: 100; 
+    speed: 160 km/h;
+    power: 8983 kW;
+    weight: 110 ton;
+    cargo_capacity: 58;
+    tractive_effort_coefficient: 0.8;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: PASS;
+    non_refittable_cargo_classes: ALL_CARGO_CLASSES;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 1;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_VBE;
+        purchase: spriteset_VBE_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        can_attach_wagon: sw_vbe_can_attach_wagon;
+    }
+}
+
+item(FEAT_TRAINS, item_vbe_ch){
+    property {
+    name: string(STR_VBE_NAME_CH);
+    
+    introduction_date: date(2018,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 95;
+    running_cost_factor: 30; 
+    speed: 160 km/h;
+    power: 0 kW;
+    weight: 110 ton;
+    cargo_capacity: 78;
+    tractive_effort_coefficient: 0.8;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_VBE_CH;
+        purchase: spriteset_VBE_CH_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        can_attach_wagon: sw_vbe_can_attach_wagon;
+    }
+}
+
+// MEMU - Y/B and Y/G Liveries
+// MEMU1 - FB
+spriteset (spriteset_MEMU, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_MEMU, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu1_f.png") {temp_train(0,0)}
+spriteset (spriteset_MEMU_PURCHASE, "gfx/emu/dummy-sprite-p.png") {temp_dh_purch(0,0)}
+alternative_sprites (spriteset_MEMU_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu_f_p.png") {temp_dh32_purch(0,0)}
+// MEMU1 - C
+spriteset (spriteset_MEMU_CH, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_MEMU_CH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu1_c.png") {temp_train(0,0)}
+spriteset (spriteset_MEMU_CH_PURCHASE, "gfx/emu/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_MEMU_CH_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu_c_p.png") {temp_purch(0,0)}
+
+// MEMU2 - FB
+spriteset (spriteset_MEMU2, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_MEMU2, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu2_f.png") {temp_train(0,0)}
+// MEMU2 - C
+spriteset (spriteset_MEMU2_CH, "gfx/emu/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_MEMU2_CH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/memu2_c.png") {temp_train(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_MEMU,cargo_subtype){
+    0:	spriteset_MEMU;  // Y/B Livery (Main)
+    1:	spriteset_MEMU2; // Y/G Livery
+}
+switch(FEAT_TRAINS,SELF,switch_livery_MEMU_CH,cargo_subtype){
+    0:	spriteset_MEMU_CH;  // Y/B Livery (Main)
+    1:	spriteset_MEMU2_CH; // Y/G Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_MEMU_text,cargo_subtype){
+    0: return string(STR_MEMU1_NAME);
+    1: return string(STR_MEMU2_NAME);
+       return CB_RESULT_NO_TEXT;
+}
+
+switch(FEAT_TRAINS, SELF, sw_memu_can_attach_wagon, vehicle_type_id) {
+    /* SELF refers to the wagon here, check that it's a MEMU Part */
+    item_memu: return CB_RESULT_ATTACH_ALLOW;
+    item_memu_ch: return CB_RESULT_ATTACH_ALLOW;
+    return string(STR_MEMU_CANNOT_ATTACH_OTHER);
+}
+
+item(FEAT_TRAINS, item_memu){
+    property {
+    name: string(STR_MEMU_NAME);
+    
+    introduction_date: date(1995,7,15);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 25; 
+    running_cost_factor: 100; 
+    speed: 130 km/h;
+    power: 167 kW;
+    weight: 38 ton;
+    cargo_capacity: 110;
+    tractive_effort_coefficient: 0.8;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 1;
+    length: 8;
+    cargo_allow_refit: [PASS];
+    cargo_capacity: 110;
+    }
+    graphics {
+        default: switch_livery_MEMU;
+        purchase: spriteset_MEMU_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        can_attach_wagon: sw_memu_can_attach_wagon;
+        cargo_subtype_text:	switch_livery_MEMU_text;
+    }
+}
+
+item(FEAT_TRAINS, item_memu_ch){
+    property {
+    name: string(STR_MEMU_CH_NAME);
+    
+    introduction_date: date(1995,7,15);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 25;
+    running_cost_factor: 30; 
+    speed: 130 km/h;
+    power: 0 kW;
+    weight: 38 ton;
+    cargo_capacity: 139;
+    tractive_effort_coefficient: 0.8;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: PASS;
+    non_refittable_cargo_classes: ALL_CARGO_CLASSES;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+    cargo_capacity: 139;
+    }
+    graphics {
+        default: switch_livery_MEMU_CH;
+        purchase: spriteset_MEMU_CH_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        can_attach_wagon: sw_memu_can_attach_wagon;
+        cargo_subtype_text:	switch_livery_MEMU_text;
+    }
+}
+
+//ICF BLUE - NAVY AND LIGHT BLUE
+spriteset (spriteset_ICF, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue.png") {temp_train(0,0)}
+spriteset (spriteset_ICF2, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF2, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue_2.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue_purch.png") {temp_purch(0,0)}
+
+// ICF Blue SLR
+spriteset (spriteset_ICFBLUE_SLR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFBLUE_SLR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue_slr_f.png") {temp_train(0,0)}
+spriteset (spriteset_ICFBLUE_SLR_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFBLUE_SLR_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue_slr_r.png") {temp_train(0,0)}
+
+spriteset (spriteset_ICFBLUE2_SLR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFBLUE2_SLR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue2_slr_f.png") {temp_train(0,0)}
+spriteset (spriteset_ICFBLUE2_SLR_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFBLUE2_SLR_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_blue2_slr_r.png") {temp_train(0,0)}
+
+// Switches
+// Random ICF Blue livery + SLR
+random_switch(FEAT_TRAINS, SELF, random_icfblue_livery) {
+    1: spriteset_ICF;
+    1: spriteset_ICF2;
+}
+random_switch(FEAT_TRAINS, SELF, random_icfblue_slrF) {
+    1: spriteset_ICFBLUE_SLR;
+    1: spriteset_ICFBLUE2_SLR;
+}
+random_switch(FEAT_TRAINS, SELF, random_icfblue_slrR) {
+    1: spriteset_ICFBLUE_SLR_REV;
+    1: spriteset_ICFBLUE2_SLR_REV;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_blue_slr_rand_back, position_in_consist_from_end) {
+	0: random_icfblue_slrR;
+	random_icfblue_livery;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_blue_slr_rand, position_in_vehid_chain) {
+    0: random_icfblue_slrF;
+    switch_icf_blue_slr_rand_back;
+}
+
+// ICF Blue - Navy Blue
+switch(FEAT_TRAINS, SELF, switch_icf_blue_slr_back, position_in_consist_from_end) {
+	0: spriteset_ICFBLUE_SLR_REV;
+	spriteset_ICF;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_blue_slr, position_in_vehid_chain) {
+    0: spriteset_ICFBLUE_SLR;
+    switch_icf_blue_slr_back;
+}
+
+// ICF Blue - Light Blue
+switch(FEAT_TRAINS, SELF, switch_icf_blue2_slr_back, position_in_consist_from_end) {
+	0: spriteset_ICFBLUE2_SLR_REV;
+	spriteset_ICF2;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_blue2_slr, position_in_vehid_chain) {
+    0: spriteset_ICFBLUE2_SLR;
+    switch_icf_blue2_slr_back;
+}
+
+switch(FEAT_TRAINS,SELF,switch_livery_icfblue,cargo_subtype){
+    0:	switch_icf_blue_slr_rand;  // Randomised Navy/Light(er) blue livery
+    1:	switch_icf_blue_slr;       // Navy blue livery
+    2:  switch_icf_blue2_slr;      // Light(er) blue livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_icfblue_text,cargo_subtype){
+    0: return string(STR_ICF_BL_RA);
+    1: return string(STR_ICF_BL_NB);
+    2: return string(STR_ICF_BL_LB);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_icf){
+    property {
+    name: string(STR_ICF_NAME);
+    
+    introduction_date: date(1998,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 50; 
+    running_cost_factor: 70; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 43 ton;
+    cargo_capacity: 75;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+    cargo_capacity: 75;
+    }
+    graphics {
+        default: switch_livery_icfblue;
+        purchase: spriteset_ICF_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text: switch_livery_icfblue_text;
+        cargo_capacity: 75;
+    }
+}
+
+// MAIL VAN / HIGH CAPACITY PARCEL VAN / HCPV / VPH
+spriteset (spriteset_VPH, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VPH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/hcpv_icf.png") {temp_train(0,0)}
+spriteset (spriteset_VPH_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_VPH_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/hcpv_icf_purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_vph){
+    property {
+    name: string(STR_VPH_NAME);
+    
+    introduction_date: date(1998,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 50; 
+    running_cost_factor: 70; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 35 ton;
+    cargo_capacity: 25;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_allow_refit: [MAIL, PCL_];
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_VPH;
+        purchase: spriteset_VPH_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ICF BROWN
+spriteset (spriteset_ICF_BROWN, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_BROWN, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_brown.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_BROWN_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_BROWN_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_brown_purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_icf_brown){
+    property {
+    name: string(STR_ICF_BROWN_NAME);
+    
+    introduction_date: date(1952,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 40; 
+    running_cost_factor: 40; 
+    speed: 60 km/h;
+    power: 0 kW;
+    weight: 56 ton;
+    cargo_capacity: 75;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_ICF_BROWN;
+        purchase: spriteset_ICF_BROWN_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ICF UTKRISHT
+spriteset (spriteset_ICF_UTKRISHT, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_UTKRISHT, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_utkrisht.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_UTKRISHT_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_UTKRISHT_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_utkrisht_purch.png") {temp_purch(0,0)}
+
+// SLR
+spriteset (spriteset_ICFUTK_SLR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFUTK_SLR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_utkrisht_slr_f.png") {temp_train(0,0)}
+spriteset (spriteset_ICFUTK_SLR_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICFUTK_SLR_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_utkrisht_slr_r.png") {temp_train(0,0)}
+
+switch(FEAT_TRAINS, SELF, switch_icf_utk_slr_back, position_in_consist_from_end) {
+	0: spriteset_ICFUTK_SLR_REV;
+	spriteset_ICF_UTKRISHT;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_utk_slr, position_in_vehid_chain) {
+    0: spriteset_ICFUTK_SLR;
+    switch_icf_utk_slr_back;
+}
+
+item(FEAT_TRAINS, item_icf_utkrisht){
+    property {
+    name: string(STR_ICF_UTK_NAME);
+    
+    introduction_date: date(2019,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 70; 
+    running_cost_factor: 60; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 43 ton;
+    cargo_capacity: 75;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_icf_utk_slr;
+        purchase: spriteset_ICF_UTKRISHT_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ICF RAJDHANI
+spriteset (spriteset_ICF_RAJ, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_RAJ, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_raj.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_RAJ_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_RAJ_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_raj_purch.png") {temp_purch(0,0)}
+
+// ICF Rajdhani EOG
+spriteset (spriteset_RAJ_EOG, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_RAJ_EOG, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_raj_eog_f.png") {temp_train(0,0)}
+spriteset (spriteset_RAJ_EOG_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_RAJ_EOG_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_raj_eog_r.png") {temp_train(0,0)}
+
+// EOG Switch
+switch(FEAT_TRAINS, SELF, switch_icf_raj_eog_back, position_in_consist_from_end) {
+	0: spriteset_RAJ_EOG_REV;
+	spriteset_ICF_RAJ;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_raj_eog, position_in_vehid_chain) {
+    0: spriteset_RAJ_EOG;
+    switch_icf_raj_eog_back;
+}
+
+item(FEAT_TRAINS, item_icf_raj){
+    property {
+    name: string(STR_ICF_RAJ_NAME);
+    
+    introduction_date: date(1967,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 70; 
+    running_cost_factor: 75; 
+    speed: 140 km/h;
+    power: 0 kW;
+    weight: 49 ton;
+    cargo_capacity: 64;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_icf_raj_eog;
+        purchase: spriteset_ICF_RAJ_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ICF GARIBRATH
+spriteset (spriteset_ICF_GAR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_GAR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_gar.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_GAR_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_GAR_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_gar_purch.png") {temp_purch(0,0)}
+
+// ICF Garibrath EOG
+spriteset (spriteset_GAR_EOG, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_GAR_EOG, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_gar_eog_f.png") {temp_train(0,0)}
+spriteset (spriteset_GAR_EOG_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_GAR_EOG_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_gar_eog_r.png") {temp_train(0,0)}
+
+// EOG Switch
+switch(FEAT_TRAINS, SELF, switch_icf_gar_eog_back, position_in_consist_from_end) {
+	0: spriteset_GAR_EOG;
+	spriteset_ICF_GAR;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_gar_eog, position_in_vehid_chain) {
+    0: spriteset_GAR_EOG_REV;
+    switch_icf_gar_eog_back;
+}
+
+item(FEAT_TRAINS, item_icf_gar){
+    property {
+    name: string(STR_ICF_GAR_NAME);
+    
+    introduction_date: date(2004,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 75; 
+    running_cost_factor: 80; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 49 ton;
+    cargo_capacity: 64;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_icf_gar_eog;
+        purchase: spriteset_ICF_GAR_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+//ICF SHATABDI
+spriteset (spriteset_ICF_STB, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_ICF_STB, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_stb.png") {temp_train(0,0)}
+spriteset (spriteset_ICF_STB_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_ICF_STB_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/icf/icf_stb_purch.png") {temp_purch(0,0)}
+// They use the same EOG for both ICF Rajdhani and ICF Shatabdi.
+// EOG Switch
+switch(FEAT_TRAINS, SELF, switch_icf_stb_eog_back, position_in_consist_from_end) {
+	0: spriteset_RAJ_EOG_REV;
+	spriteset_ICF_STB;
+}
+switch(FEAT_TRAINS, SELF, switch_icf_stb_eog, position_in_vehid_chain) {
+    0: spriteset_RAJ_EOG;
+    switch_icf_stb_eog_back;
+}
+
+item(FEAT_TRAINS, item_icf_stb){
+    property {
+    name: string(STR_ICF_STB_NAME);
+    
+    introduction_date: date(1986,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 80; 
+    running_cost_factor: 90; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 49 ton;
+    cargo_capacity: 64;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_icf_stb_eog;
+        purchase: spriteset_ICF_STB_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//Suburban Rake - Mumbai
+//SPRITESETS
+spriteset (spriteset_sr_coach, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_sr_coach, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/sub_coach.png") {temp_train(0,0)}
+spriteset (spriteset_sr_driver, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_sr_driver, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/sub_front.png") {temp_train(0,0)}
+spriteset (spriteset_sr_power, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_sr_power, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/sub_pwr.png") {temp_train(0,0)}
+spriteset (spriteset_sr_driver_rev, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_sr_driver_rev, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/sub_back.png") {temp_train(0,0)}
+spriteset (spriteset_sr_purch, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_sr_purch, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/emu/sub_purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS, SELF, sw_sr_articulated_part, extra_callback_info1) {
+    /* Add four articulated parts, for a total of five. */
+    1 .. 4: return item_icf_sr;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_graphics, position_in_consist % 5) {
+    0:      spriteset_sr_driver;
+    1:      spriteset_sr_coach;
+    2:      spriteset_sr_power;
+    3:      spriteset_sr_coach;
+    4:      spriteset_sr_driver_rev;
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_start_stop, num_vehs_in_consist) {
+    /* Vehicles may be coupled to a maximum of 3 units (15 cars) */
+    1 .. 15: return CB_RESULT_NO_TEXT;
+    return string(STR_SR_CANNOT_START);
+}
+
+switch(FEAT_TRAINS, SELF, sw_sr_can_attach_wagon, vehicle_type_id) {
+    /* SELF refers to the wagon here, check that it's an SR unit */
+    item_icf_sr: return CB_RESULT_ATTACH_ALLOW;
+    return string(STR_SR_CANNOT_ATTACH_OTHER);
+}
+
+item(FEAT_TRAINS, item_icf_sr){
+    property {
+    name: string(STR_ICF_SR_NAME);
+    
+    introduction_date: date(1958,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 80; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 210 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: PASS;
+    non_refittable_cargo_classes: ALL_CARGO_CLASSES;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 2, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: sw_sr_graphics;
+        purchase: spriteset_sr_purch;
+        can_attach_wagon: sw_sr_can_attach_wagon;
+        start_stop: sw_sr_start_stop;
+        articulated_part: sw_sr_articulated_part;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// //Siemens Rake - Mumbai - REMOVED TEMPORARILY.
+// //TEMPLATES
+// //Passenger Coach
+// template temp_srm_coach(x,y) {
+//     [x,			y, 			10,		28, 	-4,			-15]
+//     [x+11,		y,			27,	 	28, 	-15, 		-16]
+//     [x+39,		y, 			36,	 	28, 	-21, 		-18]
+//     [x+76, 		y, 			27,	 	28, 	-14, 		-17]
+//     [x+104,		y, 			10,	 	28, 	-4, 		-15]
+//     [x+115,  	y, 			27,	 	28, 	-15,		-16]
+//     [x+143, 	y, 			36,	 	28, 	-21,		-18]
+//     [x+180, 	y, 			27,	 	28, 	-14,		-17]
+// }
+// //Driver's Coach
+// template temp_srm_driver(x,y) {
+//     [x,			y+29, 			10,		28, 	-4,			-15]
+//     [x+11,		y+29,			27,	 	28, 	-15, 		-16]
+//     [x+39,		y+29, 			36,	 	28, 	-21, 		-18]
+//     [x+76, 		y+29, 			27,	 	28, 	-14, 		-17]
+//     [x+104,		y+29, 			10,	 	28, 	-4, 		-15]
+//     [x+115,  	y+29, 			27,	 	28, 	-15,		-16]
+//     [x+143, 	y+29, 			36,	 	28, 	-21,		-18]
+//     [x+180, 	y+29, 			27,	 	28, 	-14,		-17]
+// }
+// //Driver's Coach Reverse
+// template temp_srm_driver_rev(x,y) {
+//     [x,			y+104, 			10,		28, 	-4,			-15]
+//     [x+11,		y+104,			27,	 	28, 	-15, 		-16]
+//     [x+39,		y+104, 			36,	 	28, 	-21, 		-18]
+//     [x+76, 		y+104, 			27,	 	28, 	-14, 		-17]
+//     [x+104,		y+104, 			10,	 	28, 	-4, 		-15]
+//     [x+115,  	y+104, 			27,	 	28, 	-15,		-16]
+//     [x+143, 	y+104, 			36,	 	28, 	-21,		-18]
+//     [x+180, 	y+104, 			27,	 	28, 	-14,		-17]
+// }
+// //Power Car
+// template temp_srm_power(x,y) {
+//     [x,			y+58, 			10,		28, 	-4,			-15]
+//     [x+11,		y+58,			27,	 	28, 	-15, 		-16]
+//     [x+39,		y+58, 			36,	 	28, 	-21, 		-18]
+//     [x+76, 		y+58, 			27,	 	28, 	-14, 		-17]
+//     [x+104,		y+58, 			10,	 	28, 	-4, 		-15]
+//     [x+115,  	y+58, 			27,	 	28, 	-15,		-16]
+//     [x+143, 	y+58, 			36,	 	28, 	-21,		-18]
+//     [x+180, 	y+58, 			27,	 	28, 	-14,		-17]
+// }
+// template temp_srm_purchase(x,y) {
+//     //left_x, upper_y, width, height, offset_x, offset_y
+//     [x, y+90, 81, 13, -28, -6]
+// }
+// //SPRITESETS
+// spriteset (spriteset_srm_coach, "gfx/emu/icf_siemensrake.png") {temp_srm_coach(0,0)}
+// spriteset (spriteset_srm_driver, "gfx/emu/icf_siemensrake.png") {temp_srm_driver(0,0)}
+// spriteset (spriteset_srm_power, "gfx/emu/icf_siemensrake.png") {temp_srm_power(0,0)}
+// spriteset (spriteset_srm_driver_rev, "gfx/emu/icf_siemensrake.png") {temp_srm_driver_rev(0,0)}
+// spriteset (spriteset_srm_purch, "gfx/emu/icf_siemensrake.png") {temp_srm_purchase(0,0)}
+
+// switch(FEAT_TRAINS, SELF, sw_srm_articulated_part, extra_callback_info1) {
+//     /* Add four articulated parts, for a total of five. */
+//     1 .. 4: return item_icf_srm;
+//     return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+// }
+
+// switch(FEAT_TRAINS, SELF, sw_srm_graphics, position_in_consist % 5) {
+//     0:      spriteset_srm_driver;
+//     1:      spriteset_srm_coach;
+//     2:      spriteset_srm_power;
+//     3:      spriteset_srm_coach;
+//     4:      spriteset_srm_driver_rev;
+// }
+
+// switch(FEAT_TRAINS, SELF, sw_srm_start_stop, num_vehs_in_consist) {
+//     /* Vehicles may be coupled to a maximum of 3 units (15 cars) */
+//     1 .. 15: return CB_RESULT_NO_TEXT;
+//     return string(STR_SR_CANNOT_START);
+// }
+
+// switch(FEAT_TRAINS, SELF, sw_srm_can_attach_wagon, vehicle_type_id) {
+//     /* SELF refers to the wagon here, check that it's an SRM part */
+//     item_icf_srm: return CB_RESULT_ATTACH_ALLOW;
+//     return string(STR_SRM_CANNOT_ATTACH_OTHER);
+// }
+
+// item(FEAT_TRAINS, item_icf_srm){
+//     property {
+//     name: string(STR_ICF_SRM_NAME);
+    
+//     introduction_date: date(2005,1,1);
+//     model_life: VEHICLE_NEVER_EXPIRES;
+//     vehicle_life: 40;
+//     loading_speed: 10;
+//     cost_factor: 90; 
+//     running_cost_factor: 70; 
+//     speed: 100 km/h;
+//     power: 240 kW;
+//     weight: 51 ton;
+//     cargo_capacity: 84;
+//     tractive_effort_coefficient: 0.3;
+//     air_drag_coefficient: 0.08;
+    
+//     reliability_decay: 20;
+//     misc_flags: 0;
+//     refit_cost: 0;
+//     track_type: ELRL;
+//     ai_special_flag: 0;
+//     running_cost_base: RUNNING_COST_ELECTRIC;
+//     engine_class: ENGINE_CLASS_ELECTRIC;
+//     climates_available: ALL_CLIMATES;
+//     visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 2, ENABLE_WAGON_POWER);
+//     sprite_id: SPRITE_ID_NEW_TRAIN;
+//     dual_headed: 0;
+//     length: 8;
+//     }
+//     graphics {
+//         default: sw_srm_graphics;
+//         purchase: spriteset_srm_purch;
+//         can_attach_wagon: sw_srm_can_attach_wagon;
+//         start_stop: sw_srm_start_stop;
+//         articulated_part: sw_srm_articulated_part;
+//         colour_mapping: return PALETTE_CC_FIRST;
+//     }
+// }
+
+// LHB Coaches
+// LHB EOG
+spriteset (spriteset_LHB_EOG, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_EOG, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_eog.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_EOG_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_EOG_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_eog_rev.png") {temp_train(0,0)}
+
+// LHB Rajdhani
+spriteset (spriteset_LHB_RAJ, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_RAJ, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_raj.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_RAJ_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_RAJ_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_raj_purch.png") {temp_purch(0,0)}
+
+// LHB Bezelless coach
+spriteset (spriteset_LHB_BZLS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_BZLS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_bezelless.png") {temp_train(0,0)}
+
+// LHB Bezelless coach - Red
+spriteset (spriteset_LHB_BZLS_RED, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_BZLS_RED, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_bezelless_red.png") {temp_train(0,0)}
+
+// LHB Panoramic Window coach - Red
+spriteset (spriteset_LHB_PANO, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_PANO, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_panoramic_red.png") {temp_train(0,0)}
+
+// EOG Switch
+// LHB RAJ
+switch(FEAT_TRAINS, SELF, switch_lhb_raj_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_EOG;
+	spriteset_LHB_RAJ;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_raj_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_EOG_REV;
+    switch_lhb_raj_eog_back;
+}
+
+// LHB BEZELLESS
+switch(FEAT_TRAINS, SELF, switch_lhb_bzls_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_EOG;
+	spriteset_LHB_BZLS;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_bzls_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_EOG_REV;
+    switch_lhb_bzls_eog_back;
+}
+
+// LHB BEZELLESS RED
+switch(FEAT_TRAINS, SELF, switch_lhb_bzls_red_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_EOG;
+	spriteset_LHB_BZLS_RED;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_bzls_red_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_EOG_REV;
+    switch_lhb_bzls_red_eog_back;
+}
+
+// LHB PANORAMIC
+switch(FEAT_TRAINS, SELF, switch_lhb_pano_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_EOG;
+	spriteset_LHB_PANO;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_pano_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_EOG_REV;
+    switch_lhb_pano_eog_back;
+}
+
+switch(FEAT_TRAINS,SELF,switch_livery_lhbraj,cargo_subtype){
+    0:	switch_lhb_raj_eog;           // Standard Rajdhani
+    1:	switch_lhb_bzls_eog;          // Bezelless
+    2:  switch_lhb_bzls_red_eog;      // Bezelless Red
+    3:  switch_lhb_pano_eog;          // Panoramic window
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_lhbraj_text,cargo_subtype){
+    0: return string(STR_LHB_RAJ_STD);
+    1: return string(STR_LHB_RAJ_BZL);
+    2: return string(STR_LHB_RAJ_BZR);
+    3: return string(STR_LHB_RAJ_PAN);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_lhb_raj){
+    property {
+    name: string(STR_LHB_RAJ_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 90; 
+    running_cost_factor: 85; 
+    speed: 160 km/h;
+    power: 0 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+    cargo_capacity: 72;
+    }
+    graphics {
+        default: switch_livery_lhbraj;
+        purchase: spriteset_LHB_RAJ_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text: switch_livery_lhbraj_text;
+        cargo_capacity: 72;
+    }
+}
+
+//OLD LHB SHATABDI
+spriteset (spriteset_LHB_STB_OLD, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_STB_OLD, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_old_stb.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_STB_OLD_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_STB_OLD_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_old_stb_purch.png") {temp_purch(0,0)}
+
+// Old EOG
+spriteset (spriteset_OLD_STB_EOG, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_OLD_STB_EOG, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_old_stb_eog.png") {temp_train(0,0)}
+spriteset (spriteset_OLD_STB_EOG_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_OLD_STB_EOG_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_old_stb_eog_rev.png") {temp_train(0,0)}
+
+switch(FEAT_TRAINS, SELF, switch_lhb_old_stb_eog_back, position_in_consist_from_end) {
+	0: spriteset_OLD_STB_EOG_REV;
+	spriteset_LHB_STB_OLD;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_old_stb_eog, position_in_vehid_chain) {
+    0: spriteset_OLD_STB_EOG;
+    switch_lhb_old_stb_eog_back;
+}
+
+//LHB SHATABDI
+spriteset (spriteset_LHB_STB, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_STB, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_stb.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_STB_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_STB_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_stb_purch.png") {temp_purch(0,0)}
+
+// EOG Switch
+switch(FEAT_TRAINS, SELF, switch_lhb_stb_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_EOG;
+	spriteset_LHB_STB;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_stb_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_EOG_REV;
+    switch_lhb_stb_eog_back;
+}
+
+// OLD/NEW
+switch(FEAT_TRAINS, SELF, switch_yeardep_stb_livery, current_year) {
+    1998 .. 2002: switch_lhb_old_stb_eog;
+    switch_lhb_stb_eog;
+}
+switch(FEAT_TRAINS, SELF, switch_yeardep_stb_purch, current_year) {
+    1998 .. 2002: spriteset_LHB_STB_OLD_PURCHASE;
+    spriteset_LHB_STB_PURCHASE;
+}
+
+
+item(FEAT_TRAINS, item_lhb_stb){
+    property {
+    name: string(STR_LHB_STB_NAME);
+    
+    introduction_date: date(1998,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 90; 
+    running_cost_factor: 80; 
+    speed: 160 km/h;
+    power: 0 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: bitmask(TRAIN_FLAG_AUTOREFIT);
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_yeardep_stb_livery;
+        purchase: switch_yeardep_stb_purch;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// LHB Humsafar
+spriteset (spriteset_LHB_HUM, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_HUM, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_humsafar.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_HUM_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_HUM_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_humsafar_purch.png") {temp_purch(0,0)}
+
+// EOG
+spriteset (spriteset_LHB_HUM_EOG, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_HUM_EOG, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_humsafar_eog.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_HUM_EOG_REV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_HUM_EOG_REV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_humsafar_eog_rev.png") {temp_train(0,0)}
+
+switch(FEAT_TRAINS, SELF, switch_lhb_hum_eog_back, position_in_consist_from_end) {
+	0: spriteset_LHB_HUM_EOG;
+	spriteset_LHB_HUM;
+}
+switch(FEAT_TRAINS, SELF, switch_lhb_hum_eog, position_in_vehid_chain) {
+    0: spriteset_LHB_HUM_EOG_REV;
+    switch_lhb_hum_eog_back;
+}
+
+item(FEAT_TRAINS, item_lhb_hum){
+    property {
+    name: string(STR_LHB_HUM_NAME);
+    
+    introduction_date: date(2016,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 90; 
+    running_cost_factor: 80; 
+    speed: 160 km/h;
+    power: 0 kW;
+    weight: 51 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_lhb_hum_eog;
+        purchase: spriteset_LHB_HUM_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// LHB VPH
+spriteset (spriteset_LHB_VPH, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_VPH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/hcpv_lhb.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_VPH_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_VPH_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/hcpv_lhb_purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_lhb_vph){
+    property {
+    name: string(STR_LHB_VPH_NAME);
+    
+    introduction_date: date(2019,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 50; 
+    running_cost_factor: 70; 
+    speed: 130 km/h;
+    power: 0 kW;
+    weight: 25 ton;
+    cargo_capacity: 24;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_allow_refit: [MAIL, PCL_];
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_LHB_VPH;
+        purchase: spriteset_LHB_VPH_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//LHB HYBRID
+spriteset (spriteset_LHB_HYB, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_LHB_HYB, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_hyb.png") {temp_train(0,0)}
+spriteset (spriteset_LHB_HYB_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_LHB_HYB_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/lhb/lhb_hyb_purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_lhb_hyb){
+    property {
+    name: string(STR_LHB_HYB_NAME);
+    
+    introduction_date: date(2005,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 60; 
+    running_cost_factor: 60; 
+    speed: 120 km/h;
+    power: 0 kW;
+    weight: 43 ton;
+    cargo_capacity: 80;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_LHB_HYB;
+        purchase: spriteset_LHB_HYB_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//ENGINES / LOCOMOTIVES
+//WDM2 - REMOVED TEMPORARILY
+
+// template temp_wdm2(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x,			y, 			8,		24, 	-3,			-12]
+//     [x+9,		y,			22,	 	20, 	-14, 		-13]
+//     [x+32,		y, 			32,	 	16, 	-19, 		-12]
+//     [x+65, 		y, 			22,	 	20, 	-8, 		-12]
+//     [x+88,		y, 			8,	 	24, 	-3, 		-12]
+//     [x+97,  	y, 			22,	 	20, 	-14,		-13]
+//     [x+120, 	y, 			32,	 	16, 	-19,		-12]
+//     [x+153, 	y, 			22,	 	20, 	-8,		    -12]
+// }
+// template temp_wdm2rev(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x+88,		y, 			8,	 	24, 	-3, 		-12]
+//     [x+97,  	y, 			22,	 	20, 	-14,		-12]
+//     [x+120, 	y, 			32,	 	16, 	-20,		-12]
+//     [x+153, 	y, 			22,	 	20, 	-14,		-16]
+// 	[x,			y, 			8,		24, 	-3,			-12]
+//     [x+9,		y,			22,	 	20, 	-14, 		-12]
+//     [x+32,		y, 			32,	 	16, 	-20, 		-12]
+//     [x+65, 		y, 			22,	 	20, 	-14, 		-16]
+// }
+// template TEMP_WDM2PURCH(x,y) {
+//     //left_x, upper_y, width, height, offset_x, offset_y
+//     [x, y, 81, 12, -28, -6]
+// }
+// spriteset (spriteset_WDMII, "gfx/eng/dsl/eng_dsl_wdm2.png") {temp_wdm2(0,0)}
+// spriteset (spriteset_WDMII_PURCHASE, "gfx/eng/dsl/eng_dsl_wdm2_purch.png") {TEMP_WDM2PURCH(0,0)}
+
+// item(FEAT_TRAINS, item_eng_wdmii){
+//     property {
+//     name: string(STR_ENG_WDMII_NAME);
+    
+//     introduction_date: date(1951,1,1);
+//     model_life: VEHICLE_NEVER_EXPIRES;
+//     vehicle_life: 30;
+//     loading_speed: 10;
+//     cost_factor: 60; 
+//     running_cost_factor: 100; 
+//     speed: 120 km/h;
+//     power: 1900 kW;
+//     weight: 112 ton;
+//     cargo_capacity: 0;
+//     tractive_effort_coefficient: 0.3;
+//     air_drag_coefficient: 0.08;
+    
+//     reliability_decay: 20;
+//     misc_flags: 0;
+//     refit_cost: 0;
+//     track_type: RAIL;
+//     ai_special_flag: 0;
+//     running_cost_base: RUNNING_COST_DIESEL;
+//     engine_class: ENGINE_CLASS_DIESEL;
+//     climates_available: ALL_CLIMATES;
+//     visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+//     sprite_id: SPRITE_ID_NEW_TRAIN;
+//     dual_headed: 0;
+//     length: 8;
+//     }
+//     graphics {
+//         default: spriteset_WDMII;
+//         purchase: spriteset_WDMII_PURCHASE;
+//         colour_mapping: return PALETTE_CC_FIRST;
+//     }
+// }
+
+// //WCM1 - REMOVED TEMPORARILY
+// template temp_wcm1(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x,			y, 			8,		24, 	-3,			-12]
+//     [x+9,		y,			22,	 	20, 	-14, 		-12]
+//     [x+32,		y, 			32,	 	16, 	-20, 		-12]
+//     [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+//     [x+88,		y, 			8,	 	24, 	-3, 		-12]
+//     [x+97,  	y, 			22,	 	20, 	-14,		-12]
+//     [x+120, 	y, 			32,	 	16, 	-20,		-12]
+//     [x+153, 	y, 			22,	 	20, 	-14,		-12]
+// }
+// template temp_wcm1rev(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x+88,		y, 			8,	 	24, 	-3, 		-12]
+//     [x+97,  	y, 			22,	 	20, 	-14,		-12]
+//     [x+120, 	y, 			32,	 	16, 	-20,		-12]
+//     [x+153, 	y, 			22,	 	20, 	-14,		-12]
+// 	[x,			y, 			8,		24, 	-3,			-12]
+//     [x+9,		y,			22,	 	20, 	-14, 		-12]
+//     [x+32,		y, 			32,	 	16, 	-20, 		-12]
+//     [x+65, 		y, 			22,	 	20, 	-14, 		-12]
+// }
+// template TEMP_WCM1PURCH(x,y) {
+//     //left_x, upper_y, width, height, offset_x, offset_y
+//     [x, y, 81, 12, -28, -6]
+// }
+
+// spriteset (spriteset_WCMI, "gfx/eng/ele/eng_wcm_i.png") {temp_wcm1(0,0)}
+// spriteset (spriteset_WCMI_PURCHASE, "gfx/eng/ele/eng_wcm_i_purch.png") {TEMP_WCM1PURCH(0,0)}
+
+// item(FEAT_TRAINS, item_eng_wcmi){
+//     property {
+//     name: string(STR_ENG_WCMI_NAME);
+    
+//     introduction_date: date(1951,1,1);
+//     model_life: VEHICLE_NEVER_EXPIRES;
+//     vehicle_life: 30;
+//     loading_speed: 10;
+//     cost_factor: 60; 
+//     running_cost_factor: 100; 
+//     speed: 105 km/h;
+//     power: 2759 kW;
+//     weight: 78 ton;
+//     cargo_capacity: 0;
+//     tractive_effort_coefficient: 0.3;
+//     air_drag_coefficient: 0.08;
+    
+//     reliability_decay: 20;
+//     misc_flags: 0;
+//     refit_cost: 0;
+//     track_type: ELRL;
+//     ai_special_flag: 0;
+//     running_cost_base: RUNNING_COST_ELECTRIC;
+//     engine_class: ENGINE_CLASS_ELECTRIC;
+//     climates_available: ALL_CLIMATES;
+//     visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+//     sprite_id: SPRITE_ID_NEW_TRAIN;
+//     dual_headed: 0;
+//     length: 8;
+//     }
+//     graphics {
+//         default: spriteset_WCMI;
+//         purchase: spriteset_WCMI_PURCHASE;
+//         colour_mapping: return PALETTE_CC_FIRST;
+//     }
+// }
+
+// DIESEL LOCOS
+// WDG3A
+spriteset (spriteset_WDG3A, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_CHTH, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_CHTH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-chth.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_ERS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_ERS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-ers.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_GR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_GR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-gr.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_KJM, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_KJM, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-kjm.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_SKTI_B, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_SKTI_B, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-skti-b.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_SKTI_O, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_SKTI_O, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-skti-o.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_SKTI_GD, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_SKTI_GD, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-skti-gd.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_UBL, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_UBL, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-ubl.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_VSKP, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG3A_VSKP, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-vskp.png") {temp_train(0,0)}
+spriteset (spriteset_WDG3A_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDG3A_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg3a-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WDG3A,cargo_subtype){
+    0:	spriteset_WDG3A;
+    1:	spriteset_WDG3A_CHTH;
+    2:  spriteset_WDG3A_ERS;
+    3:	spriteset_WDG3A_GR;
+    4:	spriteset_WDG3A_KJM;
+    5:  spriteset_WDG3A_SKTI_B;
+    6:	spriteset_WDG3A_SKTI_O;
+    7:	spriteset_WDG3A_SKTI_GD;
+    8:	spriteset_WDG3A_UBL;
+    9:	spriteset_WDG3A_VSKP;
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WDG3A_text,cargo_subtype){
+    0: return string(STR_WDG3A_STD);
+    1: return string(STR_WDG3A_CHTH);
+    2: return string(STR_WDG3A_ERS);
+    3: return string(STR_WDG3A_GR);
+    4: return string(STR_WDG3A_KJM);
+    5: return string(STR_WDG3A_SKTI_B);
+    6: return string(STR_WDG3A_SKTI_O);
+    7: return string(STR_WDG3A_SKTI_GD);
+    8: return string(STR_WDG3A_UBL);
+    9: return string(STR_WDG3A_VSKP);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wdg3a){
+    property {
+    name: string(STR_ENG_WDG3A_NAME);
+    
+    introduction_date: date(1995,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 35; 
+    running_cost_factor: 100; 
+    speed: 105 km/h;
+    power: 2311 kW;
+    weight: 123 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [GOOD];
+	cargo_capacity: 1;
+    }
+    graphics {
+        default: switch_livery_WDG3A;
+        purchase: spriteset_WDG3A_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WDG3A_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WDM3A
+spriteset (spriteset_WDM3A, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_ABR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_ABR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-abr.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_KJM, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_KJM, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-kjm.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_LDH, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_LDH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-ldh.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_LKO, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_LKO, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-lko.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_TKD, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_TKD, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-tkd.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_TRI, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDM3A_TRI, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-tri.png") {temp_train(0,0)}
+spriteset (spriteset_WDM3A_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDM3A_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdm3a-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WDM3A,cargo_subtype){
+    0:	spriteset_WDM3A;    //Standard Livery
+    1:	spriteset_WDM3A_ABR;    //Abu Road Livery
+    2:  spriteset_WDM3A_KJM;    //Krishnarajapuram Livery
+    3:	spriteset_WDM3A_LDH;    //Ludhiana Livery
+    4:	spriteset_WDM3A_LKO;    //Lucknow Livery
+    5:  spriteset_WDM3A_TKD;    //Tughlakabad Livery
+    6:	spriteset_WDM3A_TRI;    //Tricolor (Ratlam) Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WDM3A_text,cargo_subtype){
+    0: return string(STR_WDM3A_STD);
+    1: return string(STR_WDM3A_ABR);
+    2: return string(STR_WDM3A_KJM);
+    3: return string(STR_WDM3A_LDH);
+    4: return string(STR_WDM3A_LKO);
+    5: return string(STR_WDM3A_TKD);
+    6: return string(STR_WDM3A_TRI);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wdm3a){
+    property {
+    name: string(STR_ENG_WDM3A_NAME);
+    
+    introduction_date: date(1994,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 40; 
+    running_cost_factor: 100; 
+    speed: 120 km/h;
+    power: 2311 kW;
+    weight: 112 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [GOOD];
+	cargo_capacity: 1;
+    }
+    graphics {
+        default: switch_livery_WDM3A;
+        purchase: spriteset_WDM3A_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WDM3A_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WDP3
+spriteset (spriteset_WDP3, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_PSPK, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3_PSPK, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-pspk.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_TKD, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3_TKD, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-tkd.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_RED, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3_RED, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-red.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_RAJ, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3_RAJ, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-raj.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_DSLSKT, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP3_DSLSKT, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-dslskt.png") {temp_train(0,0)}
+spriteset (spriteset_WDP3_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDP3_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp3-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WDP3,cargo_subtype){
+    0:	spriteset_WDP3;         //Standard Livery
+    1:	spriteset_WDP3_PSPK;    //Pushpak Livery
+    2:  spriteset_WDP3_TKD;     //Tughlakabad Livery
+    3:	spriteset_WDP3_RED;     //Red Toaster Livery
+    4:	spriteset_WDP3_RAJ;     //Rajdhani Livery
+    5:  spriteset_WDP3_DSLSKT;  //Diesel Shakti Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WDP3_text,cargo_subtype){
+    0: return string(STR_WDP3_STD);
+    1: return string(STR_WDP3_PSPK);
+    2: return string(STR_WDP3_TKD);
+    3: return string(STR_WDP3_RED);
+    4: return string(STR_WDP3_RAJ);
+    5: return string(STR_WDP3_DSLSKT);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wdp3){
+    property {
+    name: string(STR_ENG_WDP3_NAME);
+    
+    introduction_date: date(1998,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 45; 
+    running_cost_factor: 100; 
+    speed: 160 km/h;
+    power: 2311 kW;
+    weight: 117 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+	cargo_capacity: 1;
+    }
+    graphics {
+        default: switch_livery_WDP3;
+        purchase: spriteset_WDP3_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WDP3_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WDG4
+spriteset (spriteset_WDG4, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG4, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4.png") {temp_train(0,0)}
+spriteset (spriteset_WDG4_BB, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG4_BB, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4bb.png") {temp_train(0,0)}
+spriteset (spriteset_WDG4_YL, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG4_YL, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4y.png") {temp_train(0,0)}
+spriteset (spriteset_WDG4_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDG4_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WDG4,cargo_subtype){
+    0:	spriteset_WDG4;    //Standard Livery
+    1:	spriteset_WDG4_BB; //Bleed Blue Livery
+    2:  spriteset_WDG4_YL; //Yellow Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WDG4_text,cargo_subtype){
+    0: return string(STR_WDG4_STD);
+    1: return string(STR_WDG4_BB);
+    2: return string(STR_WDG4_YL);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wdg4){
+    property {
+    name: string(STR_ENG_WDG4_NAME);
+    
+    introduction_date: date(1999,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 60; 
+    running_cost_factor: 100; 
+    speed: 105 km/h;
+    power: 3360 kW;
+    weight: 126 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [GOOD];
+	cargo_capacity: 1;
+    }
+    graphics {
+        default: switch_livery_WDG4;
+        purchase: spriteset_WDG4_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WDG4_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WDG4D
+spriteset (spriteset_WDG4D, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDG4D, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4d.png") {temp_train(0,0)}
+spriteset (spriteset_WDG4D_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDG4D_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdg4d-p.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_eng_wdg4d){
+    property {
+    name: string(STR_ENG_WDG4D_NAME);
+    
+    introduction_date: date(2016,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 65; 
+    running_cost_factor: 100; 
+    speed: 115 km/h;
+    power: 3356 kW;
+    weight: 130 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WDG4D;
+        purchase: spriteset_WDG4D_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// WDP4
+spriteset (spriteset_WDP4, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP4, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp4.png") {temp_train(0,0)}
+spriteset (spriteset_WDP4_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDP4_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp4-p.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_eng_wdp4){
+    property {
+    name: string(STR_ENG_WDP4_NAME);
+    
+    introduction_date: date(2001,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 65; 
+    running_cost_factor: 100; 
+    speed: 160 km/h;
+    power: 2980 kW;
+    weight: 115 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_WDP4;
+        purchase: spriteset_WDP4_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// WDP4D
+// WDG4
+spriteset (spriteset_WDP4D, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP4D, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp4d.png") {temp_train(0,0)}
+spriteset (spriteset_WDP4D_ERS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WDP4D_ERS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp4d-ers.png") {temp_train(0,0)}
+spriteset (spriteset_WDP4D_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WDP4D_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/dsl/wdp4d-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WDP4D,cargo_subtype){
+    0:	spriteset_WDP4D;     //Standard Livery
+    1:	spriteset_WDP4D_ERS; //Ernakulam Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WDP4D_text,cargo_subtype){
+    0: return string(STR_WDP4D_STD);
+    1: return string(STR_WDP4D_ERS);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wdp4d){
+    property {
+    name: string(STR_ENG_WDP4D_NAME);
+    
+    introduction_date: date(2016,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 70; 
+    running_cost_factor: 100;
+    speed: 140 km/h;
+    power: 3360 kW;
+    weight: 126 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_DIESEL;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DIESEL, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+	cargo_capacity: 1;
+    }
+    graphics {
+        default: switch_livery_WDP4D;
+        purchase: spriteset_WDP4D_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WDP4D_text;
+        cargo_capacity: 0;
+    }
+}
+
+// ELECTRIC LOCOS
+// WAM4
+spriteset (spriteset_WAM4, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAM4, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wam4.png") {temp_train(0,0)}
+spriteset (spriteset_WAM4_AJJ, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAM4_AJJ, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wam4-ajj.png") {temp_train(0,0)}
+spriteset (spriteset_WAM4_BZA, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAM4_BZA, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wam4-bza.png") {temp_train(0,0)}
+spriteset (spriteset_WAM4_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAM4_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wam4-p.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAM4,cargo_subtype){
+    0:	spriteset_WAM4;    //Itarsi (Standard) Livery
+    1:	spriteset_WAM4_AJJ; //Arakkonam Livery
+    2:  spriteset_WAM4_BZA; //Vijaywada Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WAM4_text,cargo_subtype){
+    0: return string(STR_WAM4_STD);
+    1: return string(STR_WAM4_AJJ);
+    2: return string(STR_WAM4_BZA);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wam4){
+    property {
+    name: string(STR_ENG_WAM4_NAME);
+    
+    introduction_date: date(1971,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 55; 
+    running_cost_factor: 100; 
+    speed: 120 km/h;
+    power: 2710 kW;
+    weight: 112 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+	cargo_capacity: 1;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: switch_livery_WAM4;
+        purchase: spriteset_WAM4_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAM4_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WAP1
+spriteset (spriteset_WAPI_GZB, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPI_GZB, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap1gzb.png") {temp_train(0,0)}
+spriteset (spriteset_WAPI_ARKN, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPI_ARKN, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap1akm.png") {temp_train(0,0)}
+spriteset (spriteset_WAPI_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAPI_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap1purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAPI,cargo_subtype){
+    0:	spriteset_WAPI_GZB; //Ghaziabad Livery
+    1:	spriteset_WAPI_ARKN; //Arakkonam Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WAPI_text,cargo_subtype){
+    0: return string(STR_WAPI_GZB);
+    1: return string(STR_WAPI_ARKN);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wapi){
+    property {
+    name: string(STR_ENG_WAPI_NAME);
+    
+    introduction_date: date(1977,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 10;
+    loading_speed: 10;
+    cost_factor: 60; 
+    running_cost_factor: 100; 
+    speed: 130 km/h;
+    power: 2804 kW;
+    weight: 112 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+	cargo_capacity: 1;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: switch_livery_WAPI;
+        purchase: spriteset_WAPI_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAPI_text;
+        cargo_capacity: 0;
+    }
+}
+
+//WAP4
+//SPRITESETS
+spriteset (spriteset_WAPIV_ER, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPIV_ER, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap4er.png") {temp_train(0,0)}
+spriteset (spriteset_WAPIV_SRC, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPIV_SRC, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap4src.png") {temp_train(0,0)}
+spriteset (spriteset_WAPIV_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAPIV_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap4purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAPIV,cargo_subtype){
+    0:	spriteset_WAPIV_ER; //Erode Livery
+    1:	spriteset_WAPIV_SRC; //Santragachi Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WAPIV_text,cargo_subtype){
+    0: return string(STR_WAPIV_ERODE);
+    1: return string(STR_WAPIV_SRC);
+       return CB_RESULT_NO_TEXT;
+}
+
+// //Sounds - No sounds.
+// switch(FEAT_TRAINS, SELF, sw_sfx_wap_iv, getbits(extra_callback_info1, 0, 8)){
+//     SOUND_EVENT_START : sound("sfx/wapiv_a.wav") ;
+//     SOUND_EVENT_BREAKDOWN : SOUND_TRAIN_BREAKDOWN ;
+// }
+
+item(FEAT_TRAINS, item_eng_wapiv){
+    property {
+    name: string(STR_ENG_WAPIV_NAME);
+    
+    introduction_date: date(1991,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 65; 
+    running_cost_factor: 100; 
+    speed: 140 km/h;
+    power: 3766 kW;
+    weight: 113 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 40;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [PASS];
+	cargo_capacity: 1;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: switch_livery_WAPIV;
+        purchase: spriteset_WAPIV_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAPIV_text;
+        cargo_capacity: 0;
+    }
+}
+
+//WAP5
+spriteset (spriteset_WAPV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap5.png") {temp_train(0,0)}
+spriteset (spriteset_WAPV_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAPV_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap5purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_eng_wapv){
+    property {
+    name: string(STR_ENG_WAPV_NAME);
+    
+    introduction_date: date(1992,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 70; 
+    running_cost_factor: 100; 
+    speed: 225 km/h;
+    power: 4564 kW;
+    weight: 78 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: spriteset_WAPV;
+        purchase: spriteset_WAPV_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+//WAP7
+spriteset (spriteset_WAPVII, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAPVII, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap7.png") {temp_train(0,0)}
+spriteset (spriteset_WAPVII_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAPVII_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wap7purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_eng_wapvii){
+    property {
+    name: string(STR_ENG_WAPVII_NAME);
+    
+    introduction_date: date(1997,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 75; 
+    running_cost_factor: 100; 
+    speed: 140 km/h;
+    power: 4740 kW;
+    weight: 123 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: spriteset_WAPVII;
+        purchase: spriteset_WAPVII_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// WAG5
+spriteset (spriteset_WAGV, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGV, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag5.png") {temp_train(0,0)}
+spriteset (spriteset_WAGV_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAGV_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag5purch.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_eng_wagv){
+    property {
+    name: string(STR_ENG_WAGV_NAME);
+    
+    introduction_date: date(1980,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 55; 
+    running_cost_factor: 100; 
+    speed: 105 km/h;
+    power: 2780 kW;
+    weight: 119 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: spriteset_WAGV;
+        purchase: spriteset_WAGV_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// WAG7
+spriteset (spriteset_WAGVII, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGVII, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag7.png") {temp_train(0,0)}
+spriteset (spriteset_WAGVII_T, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGVII_T, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag7tiger.png") {temp_train(0,0)}
+spriteset (spriteset_WAGVII_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAGVII_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag7purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAGVII,cargo_subtype){
+    0:	spriteset_WAGVII;   // B/Y (Main)
+    1:	spriteset_WAGVII_T; // Tigerface
+}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAGVII_text,cargo_subtype){
+    0: return string(STR_WAGVII_B);
+    1: return string(STR_WAGVII_T);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wagvii){
+    property {
+    name: string(STR_ENG_WAGVII_NAME);
+    
+    introduction_date: date(1990,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 65; 
+    running_cost_factor: 70; 
+    speed: 105 km/h;
+    power: 3990 kW;
+    weight: 123 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [GOOD];
+    cargo_capacity: 1;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: switch_livery_WAGVII;
+        purchase: spriteset_WAGVII_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAGVII_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WAG9
+spriteset (spriteset_WAGIX, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGIX, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag9.png") {temp_train(0,0)}
+spriteset (spriteset_WAGIX_R, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGIX_R, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag9ashok.png") {temp_train(0,0)}
+spriteset (spriteset_WAGIX_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAGIX_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag9purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS,SELF,switch_livery_WAGIX,cargo_subtype){
+    0:	spriteset_WAGIX; //Standard Green Livery
+    1:	spriteset_WAGIX_R; //Red Livery
+}
+
+//Livery Switch Text
+switch(FEAT_TRAINS,SELF,switch_livery_WAGIX_text,cargo_subtype){
+    0: return string(STR_WAGIX_G);
+    1: return string(STR_WAGIX_R);
+       return CB_RESULT_NO_TEXT;
+}
+
+item(FEAT_TRAINS, item_eng_wagix){
+    property {
+    name: string(STR_ENG_WAGIX_NAME);
+    
+    introduction_date: date(1996,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 75; 
+    running_cost_factor: 100; 
+    speed: 120 km/h;
+    power: 6711 kW;
+    weight: 132 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    cargo_allow_refit: [GOOD];
+    cargo_capacity: 1;
+    bitmask_vehicle_info: 00000001;
+    }
+    graphics {
+        default: switch_livery_WAGIX;
+        purchase: spriteset_WAGIX_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        cargo_subtype_text:	switch_livery_WAGIX_text;
+        cargo_capacity: 0;
+    }
+}
+
+// WAG12
+spriteset (spriteset_WAGXII_OPR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGXII_OPR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag12.png") {temp_train(0,0)}
+spriteset (spriteset_WAGXII_NOPR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_WAGXII_NOPR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag12non.png") {temp_train(0,0)}
+spriteset (spriteset_WAGXII_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_WAGXII_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/eng/ele/wag12purch.png") {temp_purch(0,0)}
+
+switch(FEAT_TRAINS, SELF, sw_xii_articulated_part, extra_callback_info1) {
+    /* Add one articulated part, for a total of two. */
+    1 .. 1: return item_eng_wagxii;
+    return CB_RESULT_NO_MORE_ARTICULATED_PARTS;
+}
+
+switch(FEAT_TRAINS, SELF, sw_wagxii_graphics, position_in_consist % 2) {
+    0:      spriteset_WAGXII_OPR;
+    1:      spriteset_WAGXII_NOPR;
+}
+
+item(FEAT_TRAINS, item_eng_wagxii){
+    property {
+    name: string(STR_ENG_WAGXII_NAME);
+    
+    introduction_date: date(2018,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 30;
+    loading_speed: 10;
+    cost_factor: 100; 
+    running_cost_factor: 100; 
+    speed: 120 km/h;
+    power: 9000 kW;
+    weight: 180 ton;
+    cargo_capacity: 0;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: ELRL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_ELECTRIC;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: sw_wagxii_graphics;
+        purchase: spriteset_WAGXII_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+        articulated_part: sw_xii_articulated_part;
+    }
+}
+
+// //WCAM-3 TEST - Not added now.
+// template temp_wcam3(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x,			y, 			10,		32, 	-4,			-12]
+//     [x+18,		y,			28,	 	30, 	-14, 		-21]
+//     [x+54,		y, 			35,	 	30, 	-20, 		-23]
+//     [x+97, 		y, 			28,	 	30, 	-14, 		-22]
+//     [x+133,		y, 			10,	 	32, 	-4, 		-12]
+//     [x+151,  	y, 			28,	 	30, 	-14,		-21]
+//     [x+187, 	y, 			35,	 	30, 	-20,		-23]
+//     [x+230, 	y, 			28,	 	30, 	-14,		-22]
+// }
+// template temp_wcam3rev(x,y) {
+//     //[left_x,	upper_y,	width,	height,	offset_x,	offset_y]
+//     [x+133,		y, 			10,	 	32, 	-4, 		-12]
+//     [x+151,  	y, 			28,	 	30, 	-14,		-21]
+//     [x+187, 	y, 			35,	 	30, 	-20,		-23]
+//     [x+230, 	y, 			28,	 	30, 	-14,		-22]
+// 	[x,			y, 			10,		32, 	-4,			-12]
+//     [x+18,		y,			28,	 	30, 	-14, 		-21]
+//     [x+54,		y, 			35,	 	30, 	-20, 		-23]
+//     [x+97, 		y, 			28,	 	30, 	-14, 		-22]
+// }
+// template TEMP_WCAM3PURCH(x,y) {
+//     //left_x, upper_y, width, height, offset_x, offset_y
+//     [x, y, 81, 12, -28, -6]
+// }
+
+// spriteset (spriteset_WCAM3, "gfx/eng/ele/eng_wcam_iii.png") {temp_wcam3(0,0)}
+// // spriteset (spriteset_WCAM3_PURCHASE, "gfx/eng/ele/eng_wcm_i_purch.png") {TEMP_WCM1PURCH(0,0)}
+
+// item(FEAT_TRAINS, item_eng_wcamiii){
+//     property {
+//     name: string(STR_ENG_WCAMIII_NAME);
+    
+//     introduction_date: date(1951,1,1);
+//     model_life: VEHICLE_NEVER_EXPIRES;
+//     vehicle_life: 30;
+//     loading_speed: 10;
+//     cost_factor: 60; 
+//     running_cost_factor: 100; 
+//     speed: 105 km/h;
+//     power: 2759 kW;
+//     weight: 78 ton;
+//     cargo_capacity: 0;
+//     tractive_effort_coefficient: 0.3;
+//     air_drag_coefficient: 0.08;
+    
+//     reliability_decay: 20;
+//     misc_flags: 0;
+//     refit_cost: 0;
+//     track_type: ELRL;
+//     ai_special_flag: 0;
+//     running_cost_base: RUNNING_COST_ELECTRIC;
+//     engine_class: ENGINE_CLASS_ELECTRIC;
+//     climates_available: ALL_CLIMATES;
+//     visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_ELECTRIC, 0, DISABLE_WAGON_POWER);
+//     sprite_id: SPRITE_ID_NEW_TRAIN;
+//     dual_headed: 0;
+//     length: 8;
+//     }
+//     graphics {
+//         default: spriteset_WCAM3;
+//         // purchase: spriteset_WCMI_PURCHASE;
+//         colour_mapping: return PALETTE_CC_FIRST;
+//     }
+// }
+
+// FREIGHT WAGONS
+// BOXN-HL
+// Huge thanks to Emperor Jake for teaching me how to do sprite layering and recoloring.
+spriteset (spriteset_BOXN_HL, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BOXN_HL, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/boxn_hl.png") {temp_train(0,0)}
+spriteset (spriteset_BOXN_HL_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BOXN_HL_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/boxn_hl_p.png") {temp_purch(0,0)}
+spriteset (spriteset_BOXN_HL_BROWN, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BOXN_HL_BROWN, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/boxn_hl_brown.png") {temp_train(0,0)}
+spriteset (spriteset_RECOLOUR_BASE, "gfx/coach/freight/recolourbase.png") {temp_train(0,0)}
+spriteset (spriteset_RECOLOUR_BASE_E, "gfx/coach/freight/recolourbase_empty.png") {temp_train(0,0)}
+
+recolour_bulk = reserve_sprites(3);
+replace(recolour_bulk) {
+    //Fallback 0
+    recolour_sprite {
+        0xE5: 0x90;
+        0xE8: 0x91;
+        0xE9: 0x92;
+        0xEA: 0x93;
+        0xEB: 0x94;
+        0xEC: 0x95;
+        0xED: 0x96;
+        0xEE: 0x97;
+    }
+    //coal 1
+    recolour_sprite {
+        0xE5: 0x01;
+        0xE8: 0x01;
+        0xE9: 0x02;
+        0xEA: 0x02;
+        0xEB: 0x03;
+        0xEC: 0x03;
+        0xED: 0x04;
+        0xEE: 0x04;
+    }
+    //iore 2
+    recolour_sprite {
+        0xE5: 0x46;
+        0xE8: 0x47;
+        0xE9: 0x48;
+        0xEA: 0x49;
+        0xEB: 0x4A;
+        0xEC: 0x4B;
+        0xED: 0x4C;
+        0xEE: 0x4D;
+    }
+}
+
+switch(FEAT_TRAINS, SELF, switch_bulk_recolour, cargo_type_in_veh) {
+    COAL: return recolour_bulk +1;
+    IORE: return recolour_bulk +2;
+}
+
+random_switch(FEAT_TRAINS, SELF, random_BOXN_HL_LIVERY) {
+	1: spriteset_BOXN_HL_BROWN; //brown livery
+	1: spriteset_BOXN_HL;       //blue livery
+}
+
+spritegroup spritegroup_BOXN_HL_LOAD {
+    loading: [spriteset_RECOLOUR_BASE_E, spriteset_RECOLOUR_BASE];
+    loaded:  [spriteset_RECOLOUR_BASE_E, spriteset_RECOLOUR_BASE];
+}
+
+switch(FEAT_TRAINS, SELF, switch_BOXN_HL_STACK, [STORE_TEMP(CB_FLAG_MORE_SPRITES | PALETTE_USE_DEFAULT, 0x100), getbits(extra_callback_info1, 8, 8)]) {
+    0:  random_BOXN_HL_LIVERY;
+    1:  spritegroup_BOXN_HL_LOAD;
+}
+
+item(FEAT_TRAINS, item_boxn_hl){
+    property {
+    name: string(STR_BOXN_HL_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 70; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 20 ton;
+    cargo_capacity: 72;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: COAL;
+    cargo_allow_refit: [COAL, IORE];
+    
+    reliability_decay: 20;
+    misc_flags: bitmask(TRAIN_FLAG_SPRITE_STACK);
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_BOXN_HL_STACK;
+        purchase: spriteset_BOXN_HL_PURCHASE;
+        colour_mapping: switch_bulk_recolour;
+    }
+}
+
+// BCNA-HS
+spriteset (spriteset_BCNA_HS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BCNA_HS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcna_hs.png") {temp_train(0,0)}
+spriteset (spriteset_BCNA_HS_OD, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BCNA_HS_OD, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcna_hs_od.png") {temp_train(0,0)}
+spriteset (spriteset_BCNA_HS_BL, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BCNA_HS_BL, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcna_hs_blue.png") {temp_train(0,0)}
+spriteset (spriteset_BCNA_HS_OD_BL, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BCNA_HS_OD_BL, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcna_hs_od_blue.png") {temp_train(0,0)}
+spriteset (spriteset_BCNA_HS_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BCNA_HS_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcna_hs_p.png") {temp_purch(0,0)}
+
+spritegroup spritegroup_BCNA_HS {
+    loading: [spriteset_BCNA_HS_OD];
+    loaded:  [spriteset_BCNA_HS];
+}
+
+spritegroup spritegroup_BCNA_HS_BLUE {
+    loading: [spriteset_BCNA_HS_OD_BL];
+    loaded:  [spriteset_BCNA_HS_BL];
+}
+
+random_switch(FEAT_TRAINS, SELF, random_BCNA_HS_LIVERY) {
+	1: spritegroup_BCNA_HS; //brown livery
+	1: spritegroup_BCNA_HS_BLUE;   //blue livery
+}
+
+item(FEAT_TRAINS, item_bcna_hs){
+    property {
+    name: string(STR_BCNA_HS_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 75; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 20 ton;
+    cargo_capacity: 67;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: CMNT;
+    refittable_cargo_classes: bitmask(CC_COVERED, CC_BULK);
+    cargo_allow_refit: [GRAI, WHEA, FRUT, MAIZ, SUGR, BEAN, CERE, CLAY, CMNT, FERT, FICR, PEAT, PHOS, SAND, WDPR];
+    cargo_disallow_refit: [COAL, IORE, KAOL, AORE, CORE, LIME, NICK, NKOR, SULP, URAN, SCMT];
+    non_refittable_cargo_classes: CC_LIQUID;
+
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: random_BCNA_HS_LIVERY;
+        purchase: spriteset_BCNA_HS_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// BCACBM
+spriteset (spriteset_BCACBM, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BCACBM, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcacbm.png") {temp_train(0,0)}
+spriteset (spriteset_BCACBM_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BCACBM_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/bcacbm_p.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_bcacbm){
+    property {
+    name: string(STR_BCACBM_NAME);
+    
+    introduction_date: date(2013,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 80; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 35 ton;
+    cargo_capacity: 10;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: VEHI;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_BCACBM;
+        purchase: spriteset_BCACBM_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// BTPN
+spriteset (spriteset_BTPN, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BTPN, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/btpn.png") {temp_train(0,0)}
+spriteset (spriteset_BTPN_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BTPN_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/btpn_p.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_btpn){
+    property {
+    name: string(STR_BTPN_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 90; 
+    running_cost_factor: 80; 
+    speed: 80 km/h;
+    power: 0 kW;
+    weight: 27 ton;
+    cargo_capacity: 54;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_allow_refit: [OIL_, FUEL, EOIL];
+    refittable_cargo_classes: CC_LIQUID;
+    cargo_disallow_refit: [RUBR, CTAR, DYES, MILK, SULP];
+    non_refittable_cargo_classes: ALL_CARGO_CLASSES;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_BTPN;
+        purchase: spriteset_BTPN_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// VVNH
+spriteset (spriteset_VVNH, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VVNH, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/vvnh.png") {temp_train(0,0)}
+spriteset (spriteset_VVNH_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_VVNH_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/vvnh_p.png") {temp_purch(0,0)}
+
+item(FEAT_TRAINS, item_vvnh){
+    property {
+    name: string(STR_VVNH_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 85; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 33 ton;
+    cargo_capacity: 45;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    default_cargo_type: MILK;
+    
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: spriteset_VVNH;
+        purchase: spriteset_VVNH_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// VR - Refrigerated Van
+spriteset (spriteset_VR, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VR, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/refri_van.png") {temp_train(0,0)}
+spriteset (spriteset_VR2, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_VR2, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/refri_van2.png") {temp_train(0,0)}
+spriteset (spriteset_VR_PURCHASE, "gfx/coach/icf/dummy-sprite-p.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_VR_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/refri_van_p.png") {temp_purch(0,0)}
+
+random_switch(FEAT_TRAINS, SELF, random_VR_VAN) {
+	1: spriteset_VR;
+	1: spriteset_VR2;
+}
+
+item(FEAT_TRAINS, item_vr){
+    property {
+    name: string(STR_VR_NAME);
+    
+    introduction_date: date(2016,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 85; 
+    running_cost_factor: 80; 
+    speed: 110 km/h;
+    power: 0 kW;
+    weight: 35 ton;
+    cargo_capacity: 17;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_allow_refit: [FOOD, FRUT, FISH, CHSE, FRVG, MEAT, OYST, TATO, GOOD];
+    cargo_disallow_refit: [PASS, MAIL, MILK];
+
+    reliability_decay: 20;
+    misc_flags: 0;
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: random_VR_VAN;
+        purchase: spriteset_VR_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// CONCOR - SINGLE AND DOUBLE STACK
+// CONTAINER SPRITESETS
+// SINGLE STACK CONTAINER SPRITESETS
+spriteset (spriteset_CON1, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON1, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con1.png") {temp_train(0,0)}
+spriteset (spriteset_CON2, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON2, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con2.png") {temp_train(0,0)}
+spriteset (spriteset_CON3, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON3, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con3.png") {temp_train(0,0)}
+spriteset (spriteset_CON4, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON4, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con4.png") {temp_train(0,0)}
+spriteset (spriteset_CON5, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON5, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con5.png") {temp_train(0,0)}
+spriteset (spriteset_CON6, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON6, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con6.png") {temp_train(0,0)}
+spriteset (spriteset_CON7, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON7, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con7.png") {temp_train(0,0)}
+spriteset (spriteset_CONempty, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CONempty, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/empty.png") {temp_train(0,0)}
+
+// DOUBLE STACK CONTAINER SPRITESETS
+spriteset (spriteset_CON1_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON1_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con1.png") {temp_ds(0,0)}
+spriteset (spriteset_CON2_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON2_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con2.png") {temp_ds(0,0)}
+spriteset (spriteset_CON3_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON3_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con3.png") {temp_ds(0,0)}
+spriteset (spriteset_CON4_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON4_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con4.png") {temp_ds(0,0)}
+spriteset (spriteset_CON5_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON5_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con5.png") {temp_ds(0,0)}
+spriteset (spriteset_CON6_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON6_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con6.png") {temp_ds(0,0)}
+spriteset (spriteset_CON7_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CON7_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/con7.png") {temp_ds(0,0)}
+spriteset (spriteset_CONempty_DS, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_CONempty_DS, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/empty.png") {temp_ds(0,0)}
+
+// CONTAINER SPRITEGROUPS
+// SINGLE STACK
+spritegroup spritegroup_CON1 {
+    loading: [spriteset_CONempty, spriteset_CON1];
+    loaded:  [spriteset_CONempty, spriteset_CON1];
+}
+spritegroup spritegroup_CON2 {
+    loading: [spriteset_CONempty, spriteset_CON2];
+    loaded:  [spriteset_CONempty, spriteset_CON2];
+}
+spritegroup spritegroup_CON3 {
+    loading: [spriteset_CONempty, spriteset_CON3];
+    loaded:  [spriteset_CONempty, spriteset_CON3];
+}
+spritegroup spritegroup_CON4 {
+    loading: [spriteset_CONempty, spriteset_CON4];
+    loaded:  [spriteset_CONempty, spriteset_CON4];
+}
+spritegroup spritegroup_CON5 {
+    loading: [spriteset_CONempty, spriteset_CON5];
+    loaded:  [spriteset_CONempty, spriteset_CON5];
+}
+spritegroup spritegroup_CON6 {
+    loading: [spriteset_CONempty, spriteset_CON6];
+    loaded:  [spriteset_CONempty, spriteset_CON6];
+}
+spritegroup spritegroup_CON7 {
+    loading: [spriteset_CONempty, spriteset_CON7];
+    loaded:  [spriteset_CONempty, spriteset_CON7];
+}
+
+// DOUBLE STACK
+spritegroup spritegroup_CON1_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON7, spriteset_CON1_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON7, spriteset_CON1_DS];
+}
+spritegroup spritegroup_CON2_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON6, spriteset_CON2_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON6, spriteset_CON2_DS];
+}
+spritegroup spritegroup_CON3_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON5, spriteset_CON3_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON5, spriteset_CON3_DS];
+}
+spritegroup spritegroup_CON4_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON4, spriteset_CON4_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON4, spriteset_CON4_DS];
+}
+spritegroup spritegroup_CON5_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON3, spriteset_CON5_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON3, spriteset_CON5_DS];
+}
+spritegroup spritegroup_CON6_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON2, spriteset_CON6_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON2, spriteset_CON6_DS];
+}
+spritegroup spritegroup_CON7_DS {
+    loading: [spriteset_CONempty_DS, spriteset_CON1, spriteset_CON7_DS];
+    loaded:  [spriteset_CONempty_DS, spriteset_CON1, spriteset_CON7_DS];
+}
+
+// SINGLE STACK BLCA - FLATBED
+spriteset (spriteset_BLCA, "gfx/coach/icf/dummy-sprite.png") {dummy_sprite(0,0)}
+alternative_sprites (spriteset_BLCA, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/blca.png") {temp_train(0,0)}
+spriteset (spriteset_BLCA_PURCHASE, "gfx/coach/icf/dummy-sprite.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BLCA_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/blca_p.png") {temp_purch(0,0)}
+
+// RANDOM CHOOSER AND SPRITE STACKING
+random_switch(FEAT_TRAINS, SELF, random_CONTAINER) {
+	1: spritegroup_CON1;
+	1: spritegroup_CON2;
+    1: spritegroup_CON3;
+	1: spritegroup_CON4;
+    1: spritegroup_CON5;
+	1: spritegroup_CON6;
+    1: spritegroup_CON7;
+}
+
+switch(FEAT_TRAINS, SELF, switch_BLCA_STACK, [STORE_TEMP(CB_FLAG_MORE_SPRITES | PALETTE_USE_DEFAULT, 0x100), getbits(extra_callback_info1, 8, 8)]) {
+    0:  spriteset_BLCA;
+    1:  random_CONTAINER;
+}
+
+item(FEAT_TRAINS, item_blca){
+    property {
+    name: string(STR_BLCA_NAME);
+    
+    introduction_date: date(2002,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 85; 
+    running_cost_factor: 80; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 19 ton;
+    cargo_capacity: 61;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_disallow_refit: [VEHI, COPR];
+    refittable_cargo_classes: ALL_NORMAL_CARGO_CLASSES;
+    non_refittable_cargo_classes: bitmask(CC_LIQUID, CC_HAZARDOUS, CC_OVERSIZED, CC_PASSENGERS, CC_MAIL, CC_BULK, CC_REFRIGERATED);
+    
+    reliability_decay: 20;
+    misc_flags: bitmask(TRAIN_FLAG_SPRITE_STACK);
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_BLCA_STACK;
+        purchase: spriteset_BLCA_PURCHASE;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}
+
+// DOUBLE STACK BLCA - FLATBED
+// MAIN SPRITE IS SAME AS SINGLE STACK
+// PURCHASE SPRITE
+spriteset (spriteset_BLCA_DS_PURCHASE, "gfx/coach/icf/dummy-sprite.png") {temp_dummypurch(0,0)}
+alternative_sprites (spriteset_BLCA_DS_PURCHASE, ZOOM_LEVEL_NORMAL, BIT_DEPTH_32BPP, "gfx/coach/freight/concor/blca_p_ds.png") {temp_purch(0,0)}
+// RANDOM CHOOSER AND SPRITE STACKING
+random_switch(FEAT_TRAINS, SELF, random_CONTAINER_SS) {
+	1: spritegroup_CON1;
+	1: spritegroup_CON2;
+    1: spritegroup_CON3;
+	1: spritegroup_CON4;
+    1: spritegroup_CON5;
+	1: spritegroup_CON6;
+    1: spritegroup_CON7;
+}
+
+random_switch(FEAT_TRAINS, SELF, random_CONTAINER_DS) {
+	1: spritegroup_CON7_DS;
+	1: spritegroup_CON6_DS;
+    1: spritegroup_CON5_DS;
+	1: spritegroup_CON4_DS;
+    1: spritegroup_CON3_DS;
+	1: spritegroup_CON2_DS;
+    1: spritegroup_CON1_DS;
+}
+
+switch(FEAT_TRAINS, SELF, switch_BLCA_STACK_DS, [STORE_TEMP(CB_FLAG_MORE_SPRITES | PALETTE_USE_DEFAULT, 0x100), getbits(extra_callback_info1, 8, 8)]) {
+    0:  spriteset_BLCA;
+    1:  random_CONTAINER_SS;
+    2:  random_CONTAINER_DS;
+}
+
+// Check if engine is electric or not
+switch (FEAT_TRAINS, PARENT, sw_can_attach_wagon_ds, hasbit(bitmask_consist_info, 0)) {
+    1: return string(STR_DS_ERROR);
+    return CB_RESULT_ATTACH_ALLOW;
+}
+
+item(FEAT_TRAINS, item_blca_ds){
+    property {
+    name: string(STR_BLCA_DS_NAME);
+    
+    introduction_date: date(2014,1,1);
+    model_life: VEHICLE_NEVER_EXPIRES;
+    vehicle_life: 40;
+    loading_speed: 10;
+    cost_factor: 170; 
+    running_cost_factor: 140; 
+    speed: 100 km/h;
+    power: 0 kW;
+    weight: 19 ton;
+    cargo_capacity: 122;
+    tractive_effort_coefficient: 0.3;
+    air_drag_coefficient: 0.08;
+    cargo_disallow_refit: [VEHI, COPR];
+    refittable_cargo_classes: ALL_NORMAL_CARGO_CLASSES;
+    non_refittable_cargo_classes: bitmask(CC_LIQUID, CC_HAZARDOUS, CC_OVERSIZED, CC_PASSENGERS, CC_MAIL, CC_BULK, CC_REFRIGERATED);
+    cargo_capacity: 122;
+    
+    reliability_decay: 20;
+    misc_flags: bitmask(TRAIN_FLAG_SPRITE_STACK);
+    refit_cost: 0;
+    track_type: RAIL;
+    ai_special_flag: 0;
+    running_cost_base: RUNNING_COST_ELECTRIC;
+    engine_class: ENGINE_CLASS_DIESEL;
+    climates_available: ALL_CLIMATES;
+    visual_effect_and_powered: visual_effect_and_powered(VISUAL_EFFECT_DISABLE, 0, ENABLE_WAGON_POWER);
+    sprite_id: SPRITE_ID_NEW_TRAIN;
+    dual_headed: 0;
+    length: 8;
+    }
+    graphics {
+        default: switch_BLCA_STACK_DS;
+        purchase: spriteset_BLCA_DS_PURCHASE;
+        can_attach_wagon: sw_can_attach_wagon_ds;
+        colour_mapping: return PALETTE_CC_FIRST;
+    }
+}

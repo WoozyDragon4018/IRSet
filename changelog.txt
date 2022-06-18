@@ -1,0 +1,40 @@
+IRSet - The Indian Railways Set
+Changelog
+
+0.1
+New
+> Electric Locomotives | WAG-5, WAG-7 (2 liveries), WAM-4 (3 liveries), WCAM-1, WCAM-2p, WCAM-3
+> Diesel Locomotives | WDM-3D (6 liveries), WDG-3D (10 liveries), WDP-3 (6 liveries), WDP-4, WDP-4D (2 liveries), WDG-4 (3 liveries), WDG-4D
+> Freight Wagons | BOXN-HL, BCNA-HS, BCACBM, BTPN, VVNH, BLCA (CONCOR)
+> Passenger Coaches | EOG added to LHB coaches, Old LHB Shatabdi (1998-2004)
+> MEMU (Yellow/Blue and Yellow/Green liveries)
+
+Re-added
+> Suburban Rake
+> WAG-12
+
+Fixes
+> Sprite alignment issue inside of depot/info windows fixed.
+> Fixed half of the sprite that used to go off the tracks and into anything near the end of the track.
+> Fixed the costs (again).
+
+0.0.9 - Alpha 9
+New
+- Much better looking sprites made with MagicaVoxel and Timberwolf's GoRender
+- Vande Bharat Express (Train 18)
+- ICF Brown
+- ICF Utkrisht
+- LHB Self Generating Rake / Hybrid
+
+Removed
+- WDM-2 (Temporarily)
+- Siemens Rake (Temporarily)
+- Suburban Rake (Temporarily)
+- WCM-1 (Temporarily)
+
+Fixes
+- Fixed sprite alignment of every loco and coach.
+- Changed stripe color of ICF Rajdhani to Cream instead of Yellow.
+- Fixed costs of every loco and coach.
+
+Special thanks to all who helped make this project possible.

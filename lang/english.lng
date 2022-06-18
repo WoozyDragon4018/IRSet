@@ -1,0 +1,108 @@
+##grflangid 0x01
+# This is the English language file
+
+# GRF name and description definitions
+STR_GRF_NAME        :{TITLE}
+STR_GRF_DESCRIPTION :{TITLE} is a NewGRF Set based on the Majestic Indian Railways. {}Version: {VERSION} {}Coders:{}{SILVER}WoozyDragon4018{}{BLACK}Spriters:{}{SILVER}SomeIndianGuy99, Yoshi, rotterdxm{}{BLACK}Special Thanks to:{}{SILVER}seAn | spnda, NekoMaster, Chris(Erato), Azusa, Purno{}
+
+# vehicle names
+STR_ICF_NAME                :ICF Blue
+STR_ICF_BL_RA               : Navy/Light blue random
+STR_ICF_BL_NB               : Navy blue livery
+STR_ICF_BL_LB               : Lighter blue livery
+STR_ENG_WAPIV_NAME          :WAP-4 - Electric
+STR_ENG_WAPV_NAME           :WAP-5 - Electric
+STR_ENG_WAPVII_NAME         :WAP-7 - Electric
+STR_ICF_RAJ_NAME            :ICF Rajdhani
+STR_ICF_GAR_NAME            :ICF Garibrath
+STR_LHB_RAJ_NAME            :LHB Rajdhani
+STR_LHB_RAJ_STD             : Standard Rajdhani livery
+STR_LHB_RAJ_BZL             : Bezelless Coach - Grey
+STR_LHB_RAJ_BZR             : Bezelless Coach - Red
+STR_LHB_RAJ_PAN             : Panoramic Window Coach - Red
+STR_LHB_STB_NAME            :LHB Shatabdi
+STR_LHB_HUM_NAME            :LHB Humsafar
+STR_WAPIV_ERODE             : WAP-4 - Erode Shed [RED]
+STR_WAPIV_SRC               : WAP-4 - Santragachi Shed [BLUE]
+STR_ENG_WAGIX_NAME          :WAG-9 - Electric
+STR_ICF_STB_NAME            :ICF Shatabdi
+STR_ENG_WAPI_NAME           :WAP-1 - Electric
+STR_WAPI_ARKN               : WAP-1 - Arakkonam Shed [BLUE]
+STR_WAPI_GZB                : WAP-1 - Ghaziabad Shed [RED]
+STR_ENG_WCMI_NAME           :WCM-1 - Electric
+STR_ICF_DC_NAME             :ICF Deccan Queen
+STR_WAGIX_G                 : WAG-9 - Navoday [GREEN]
+STR_WAGIX_R                 : WAG-9 - Ashok [RED]
+STR_ENG_WDMII_NAME          :WDM-2 - Diesel
+STR_ICF_SR_NAME             :Suburban Rake EMU - Electric
+STR_SR_CANNOT_ATTACH_OTHER  :Only Suburban Rake parts can be attached together.
+STR_SR_CANNOT_START         :Maximum you can attach together is 3 units or 15 coaches.
+STR_SRM_CANNOT_ATTACH_OTHER :Only Siemens Rake parts can be attached together.
+STR_ICF_SRM_NAME            :Siemens Rake EMU - Electric
+STR_VBE_NAME                :Vande Bharat Express (Train 18) - F/B - Electric
+STR_VBE_CANNOT_ATTACH_OTHER :Only Vande Bharat Express coach and locomotive can be attached together.
+STR_VBE_NAME_CH             :Vande Bharat Express (Train 18) - Coach
+STR_ENG_WAGXII_NAME         :WAG-12 - Electric
+STR_ICF_BROWN_NAME          :ICF Brown
+STR_LHB_HYB_NAME            :Hybrid LHB
+STR_ICF_UTK_NAME            :ICF Utkrisht
+STR_ENG_WCAMIII_NAME        :WCAM-3 - Electric
+STR_MEMU_NAME               :MEMU - Driving/Power Car - Electric
+STR_MEMU_CH_NAME            :MEMU - Coach     
+STR_MEMU1_NAME              : MEMU - Yellow/Blue
+STR_MEMU2_NAME              : MEMU - Yellow/Green
+STR_MEMU_CANNOT_ATTACH_OTHER:Only MEMU parts can be attached together.
+STR_BOXN_HL_NAME            :BOXN-HL - Open wagon
+STR_BCNA_HS_NAME            :BCNA-HS - Boxcar
+STR_BCACBM_NAME             :BCACBM - The Car Carrier
+STR_BTPN_NAME               :BTPN - Tanker
+STR_VVNH_NAME               :VVNH - Milk Tanker
+STR_ENG_WAGVII_NAME         :WAG-7 - Electric
+STR_WAGVII_B                : WAG7 - Standard Blue
+STR_WAGVII_T                : WAG7 - Tiger Face
+STR_ENG_WAGV_NAME           :WAG-5 - Electric
+STR_BLCA_NAME               :BLCA - Single Container Flatbed
+STR_BLCA_DS_NAME            :BLCA - Double Container Flatbed
+STR_DS_ERROR                :Double stack container trains cannot run on normal overhead lines.
+STR_ENG_WDP4_NAME           :WDP-4 - Diesel
+STR_ENG_WDG4_NAME           :WDG-4 - Diesel
+STR_WDG4_STD                : WDG-4 - Standard Livery
+STR_WDG4_BB                 : WDG-4 - Bleed Blue Livery
+STR_WDG4_YL                 : WDG-4 - Yellow Livery
+STR_ENG_WDP4D_NAME          :WDP-4D - Diesel
+STR_WDP4D_STD               : WDP-4D - Standard Livery
+STR_WDP4D_ERS               : WDP-4D - Ernakulam Livery
+STR_ENG_WDG4D_NAME          :WDG-4D - Diesel
+STR_ENG_WDM3A_NAME          :WDM-3A - Diesel
+STR_WDM3A_STD               : WDM-3A - Standard Livery
+STR_WDM3A_ABR               : WDM-3A - Abu Road Livery
+STR_WDM3A_KJM               : WDM-3A - Krishnarajapuram Livery
+STR_WDM3A_LDH               : WDM-3A - Ludhiana Livery
+STR_WDM3A_LKO               : WDM-3A - Lucknow Livery
+STR_WDM3A_TKD               : WDM-3A - Tughlakabad Livery
+STR_WDM3A_TRI               : WDM-3A - Indian Tri-colour Livery
+STR_ENG_WAM4_NAME           :WAM-4 - Electric
+STR_WAM4_STD                : WAM-4 - Itarsi (Standard) Livery
+STR_WAM4_AJJ                : WAM-4 - Arakkonam (Saptagiri) Livery
+STR_WAM4_BZA                : WAM-4 - Vijaywada Livery
+STR_VR_NAME                 :VR - Refrigerated Van
+STR_VPH_NAME                :ICF VPH - Mail Van
+STR_LHB_VPH_NAME            :LHB VPH - Mail Van
+STR_ENG_WDG3A_NAME          :WDG-3A - Diesel
+STR_WDG3A_STD               : WDG-3A - Standard Livery
+STR_WDG3A_CHTH              : WDG-3A - Cheetah Livery
+STR_WDG3A_ERS               : WDG-3A - Erode Livery
+STR_WDG3A_GR                : WDG-3A - Golden Rock Livery
+STR_WDG3A_KJM               : WDG-3A - Krishnarajapuram Livery
+STR_WDG3A_SKTI_O            : WDG-3A - Shakti Orange Livery
+STR_WDG3A_SKTI_B            : WDG-3A - Shakti Blue Livery
+STR_WDG3A_SKTI_GD           : WDG-3A - Shakti "Garuda" Livery
+STR_WDG3A_UBL               : WDG-3A - Hubli Livery
+STR_WDG3A_VSKP              : WDG-3A - Vishakhapatnam Livery
+STR_ENG_WDP3_NAME           :WDP-3 - Diesel
+STR_WDP3_STD                : WDP-3 - Golden Rock Livery
+STR_WDP3_PSPK               : WDP-3 - Pushpak Livery
+STR_WDP3_TKD                : WDP-3 - Tughlakabad Livery
+STR_WDP3_RED                : WDP-3 - "Red Toaster" Livery
+STR_WDP3_RAJ                : WDP-3 - Rajdhani Livery
+STR_WDP3_DSLSKT             : WDP-3 - "Diesel Shakti (Power)" Livery
