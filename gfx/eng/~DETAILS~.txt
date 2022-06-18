@@ -1,7 +1,0 @@
-DIR    |DETAILS			      |CONTENTS
-       |			      |
-ele    |Electric Locomotives	      |WCM-1, WAP-1, WAP-4, WAP-5, WAP-7, WAG-9
-dsl    |Diesel Locomotives	      |Work in Progress...
-
-IRSet, 2020
-(C)WoozyDragon4018, 2020
